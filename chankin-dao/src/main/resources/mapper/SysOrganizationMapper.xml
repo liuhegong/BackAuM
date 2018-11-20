@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8" ?><!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.chankin.dao.SysOrganizationMapper">
+	<resultMap id="BaseResultMap" type="com.chankin.model.entity.SysOrganization">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="description" property="description" jdbcType="VARCHAR" />
+		<result column="is_final" property="isFinal" jdbcType="INTEGER" />
+		<result column="parent_id" property="parentId" jdbcType="BIGINT" />
+		<result column="rank" property="rank" jdbcType="BIGINT" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="create_by" property="createBy" jdbcType="BIGINT" />
+		<result column="update_by" property="updateBy" jdbcType="BIGINT" />
+		<result column="status" property="status" jdbcType="TINYINT" />
+		<result column="full_name" property="fullName" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+    id, name, description, is_final, parent_id, rank, create_time, update_time, create_by, 
+    update_by, status, full_name
+  </sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from sys_organization
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from sys_organization
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+	<insert id="insert" parameterType="com.chankin.model.entity.SysOrganization">
+		<selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		insert into sys_organization (name, description, is_final,
+		parent_id, rank, create_time,
+		update_time, create_by, update_by,
+		status, full_name)
+		values (#{name,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, #{isFinal,jdbcType=INTEGER},
+		#{parentId,jdbcType=BIGINT}, #{rank,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP},
+		#{updateTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=BIGINT}, #{updateBy,jdbcType=BIGINT},
+		#{status,jdbcType=TINYINT}, #{fullName,jdbcType=VARCHAR})
+	</insert>
+	<insert id="insertSelective" parameterType="com.chankin.model.entity.SysOrganization">
+		<selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		insert into sys_organization
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="name != null">
+				name,
+			</if>
+			<if test="description != null">
+				description,
+			</if>
+			<if test="isFinal != null">
+				is_final,
+			</if>
+			<if test="parentId != null">
+				parent_id,
+			</if>
+			<if test="rank != null">
+				rank,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+			<if test="updateTime != null">
+				update_time,
+			</if>
+			<if test="createBy != null">
+				create_by,
+			</if>
+			<if test="updateBy != null">
+				update_by,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+			<if test="fullName != null">
+				full_name,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="name != null">
+				#{name,jdbcType=VARCHAR},
+			</if>
+			<if test="description != null">
+				#{description,jdbcType=VARCHAR},
+			</if>
+			<if test="isFinal != null">
+				#{isFinal,jdbcType=INTEGER},
+			</if>
+			<if test="parentId != null">
+				#{parentId,jdbcType=BIGINT},
+			</if>
+			<if test="rank != null">
+				#{rank,jdbcType=BIGINT},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateTime != null">
+				#{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createBy != null">
+				#{createBy,jdbcType=BIGINT},
+			</if>
+			<if test="updateBy != null">
+				#{updateBy,jdbcType=BIGINT},
+			</if>
+			<if test="status != null">
+				#{status,jdbcType=TINYINT},
+			</if>
+			<if test="fullName != null">
+				#{fullName,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.chankin.model.entity.SysOrganization">
+		update sys_organization
+		<set>
+			<if test="name != null">
+				name = #{name,jdbcType=VARCHAR},
+			</if>
+			<if test="description != null">
+				description = #{description,jdbcType=VARCHAR},
+			</if>
+			<if test="isFinal != null">
+				is_final = #{isFinal,jdbcType=INTEGER},
+			</if>
+			<if test="parentId != null">
+				parent_id = #{parentId,jdbcType=BIGINT},
+			</if>
+			<if test="rank != null">
+				rank = #{rank,jdbcType=BIGINT},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateTime != null">
+				update_time = #{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createBy != null">
+				create_by = #{createBy,jdbcType=BIGINT},
+			</if>
+			<if test="updateBy != null">
+				update_by = #{updateBy,jdbcType=BIGINT},
+			</if>
+			<if test="status != null">
+				status = #{status,jdbcType=TINYINT},
+			</if>
+			<if test="fullName != null">
+				full_name = #{fullName,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.chankin.model.entity.SysOrganization">
+    update sys_organization
+    set name = #{name,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR},
+      is_final = #{isFinal,jdbcType=INTEGER},
+      parent_id = #{parentId,jdbcType=BIGINT},
+      rank = #{rank,jdbcType=BIGINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      create_by = #{createBy,jdbcType=BIGINT},
+      update_by = #{updateBy,jdbcType=BIGINT},
+      status = #{status,jdbcType=TINYINT},
+      full_name = #{fullName,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

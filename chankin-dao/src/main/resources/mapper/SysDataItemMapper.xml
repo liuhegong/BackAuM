@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8" ?><!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.chankin.dao.SysDataItemMapper">
+	<resultMap id="BaseResultMap" type="com.chankin.model.entity.SysDataItem">
+		<id column="id" jdbcType="BIGINT" property="id" />
+		<result column="sys_data_group_id" jdbcType="BIGINT" property="sysDataGroupId" />
+		<result column="key_value" jdbcType="VARCHAR" property="keyValue" />
+		<result column="key_name" jdbcType="VARCHAR" property="keyName" />
+		<result column="is_final" jdbcType="INTEGER" property="isFinal" />
+		<result column="rank" jdbcType="BIGINT" property="rank" />
+		<result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+		<result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+		<result column="create_by" jdbcType="BIGINT" property="createBy" />
+		<result column="update_by" jdbcType="BIGINT" property="updateBy" />
+		<result column="status" jdbcType="TINYINT" property="status" />
+		<result column="description" jdbcType="VARCHAR" property="description" />
+	</resultMap>
+	<sql id="Base_Column_List">
+    id, sys_data_group_id, key_value, key_name, is_final, rank, create_time, update_time, 
+    create_by, update_by, status, description
+  </sql>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from sys_data_item
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from sys_data_item
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+	<insert id="insert" parameterType="com.chankin.model.entity.SysDataItem">
+		<selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		insert into sys_data_item (sys_data_group_id, key_value, key_name,
+		is_final, rank, create_time,
+		update_time, create_by, update_by,
+		status, description)
+		values (#{sysDataGroupId,jdbcType=BIGINT}, #{keyValue,jdbcType=VARCHAR}, #{keyName,jdbcType=VARCHAR},
+		#{isFinal,jdbcType=INTEGER}, #{rank,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP},
+		#{updateTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=BIGINT}, #{updateBy,jdbcType=BIGINT},
+		#{status,jdbcType=TINYINT}, #{description,jdbcType=VARCHAR})
+	</insert>
+	<insert id="insertSelective" parameterType="com.chankin.model.entity.SysDataItem">
+		<selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		insert into sys_data_item
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="sysDataGroupId != null">
+				sys_data_group_id,
+			</if>
+			<if test="keyValue != null">
+				key_value,
+			</if>
+			<if test="keyName != null">
+				key_name,
+			</if>
+			<if test="isFinal != null">
+				is_final,
+			</if>
+			<if test="rank != null">
+				rank,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+			<if test="updateTime != null">
+				update_time,
+			</if>
+			<if test="createBy != null">
+				create_by,
+			</if>
+			<if test="updateBy != null">
+				update_by,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+			<if test="description != null">
+				description,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="sysDataGroupId != null">
+				#{sysDataGroupId,jdbcType=BIGINT},
+			</if>
+			<if test="keyValue != null">
+				#{keyValue,jdbcType=VARCHAR},
+			</if>
+			<if test="keyName != null">
+				#{keyName,jdbcType=VARCHAR},
+			</if>
+			<if test="isFinal != null">
+				#{isFinal,jdbcType=INTEGER},
+			</if>
+			<if test="rank != null">
+				#{rank,jdbcType=BIGINT},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateTime != null">
+				#{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createBy != null">
+				#{createBy,jdbcType=BIGINT},
+			</if>
+			<if test="updateBy != null">
+				#{updateBy,jdbcType=BIGINT},
+			</if>
+			<if test="status != null">
+				#{status,jdbcType=TINYINT},
+			</if>
+			<if test="description != null">
+				#{description,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.chankin.model.entity.SysDataItem">
+		update sys_data_item
+		<set>
+			<if test="sysDataGroupId != null">
+				sys_data_group_id = #{sysDataGroupId,jdbcType=BIGINT},
+			</if>
+			<if test="keyValue != null">
+				key_value = #{keyValue,jdbcType=VARCHAR},
+			</if>
+			<if test="keyName != null">
+				key_name = #{keyName,jdbcType=VARCHAR},
+			</if>
+			<if test="isFinal != null">
+				is_final = #{isFinal,jdbcType=INTEGER},
+			</if>
+			<if test="rank != null">
+				rank = #{rank,jdbcType=BIGINT},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateTime != null">
+				update_time = #{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createBy != null">
+				create_by = #{createBy,jdbcType=BIGINT},
+			</if>
+			<if test="updateBy != null">
+				update_by = #{updateBy,jdbcType=BIGINT},
+			</if>
+			<if test="status != null">
+				status = #{status,jdbcType=TINYINT},
+			</if>
+			<if test="description != null">
+				description = #{description,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.chankin.model.entity.SysDataItem">
+    update sys_data_item
+    set sys_data_group_id = #{sysDataGroupId,jdbcType=BIGINT},
+      key_value = #{keyValue,jdbcType=VARCHAR},
+      key_name = #{keyName,jdbcType=VARCHAR},
+      is_final = #{isFinal,jdbcType=INTEGER},
+      rank = #{rank,jdbcType=BIGINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      create_by = #{createBy,jdbcType=BIGINT},
+      update_by = #{updateBy,jdbcType=BIGINT},
+      status = #{status,jdbcType=TINYINT},
+      description = #{description,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+	<select id="selectByKey" resultType="java.lang.String">
+		select key_value from sys_data_item where status = 1 and key_name = #{key} and sys_data_group_id= #{groupId}
+	</select>
+</mapper>

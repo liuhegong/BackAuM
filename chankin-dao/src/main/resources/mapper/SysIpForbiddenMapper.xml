@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8" ?><!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.chankin.dao.SysIpForbiddenMapper">
+	<resultMap id="BaseResultMap" type="com.chankin.model.entity.SysIpForbidden">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="is_final" property="isFinal" jdbcType="INTEGER" />
+		<result column="rank" property="rank" jdbcType="BIGINT" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="create_by" property="createBy" jdbcType="BIGINT" />
+		<result column="update_by" property="updateBy" jdbcType="BIGINT" />
+		<result column="status" property="status" jdbcType="TINYINT" />
+		<result column="expire_time" property="expireTime" jdbcType="TIMESTAMP" />
+		<result column="description" property="description" jdbcType="VARCHAR" />
+		<result column="ip" property="ip" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+    id, is_final, rank, create_time, update_time, create_by, update_by, status, expire_time, 
+    description, ip
+  </sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from sys_ip_forbidden
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from sys_ip_forbidden
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+	<insert id="insert" parameterType="com.chankin.model.entity.SysIpForbidden">
+		<selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		insert into sys_ip_forbidden (is_final, rank, create_time,
+		update_time, create_by, update_by,
+		status, expire_time, description,
+		ip)
+		values (#{isFinal,jdbcType=INTEGER}, #{rank,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP},
+		#{updateTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=BIGINT}, #{updateBy,jdbcType=BIGINT},
+		#{status,jdbcType=TINYINT}, #{expireTime,jdbcType=TIMESTAMP}, #{description,jdbcType=VARCHAR},
+		#{ip,jdbcType=VARCHAR})
+	</insert>
+	<insert id="insertSelective" parameterType="com.chankin.model.entity.SysIpForbidden">
+		<selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		insert into sys_ip_forbidden
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="isFinal != null">
+				is_final,
+			</if>
+			<if test="rank != null">
+				rank,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+			<if test="updateTime != null">
+				update_time,
+			</if>
+			<if test="createBy != null">
+				create_by,
+			</if>
+			<if test="updateBy != null">
+				update_by,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+			<if test="expireTime != null">
+				expire_time,
+			</if>
+			<if test="description != null">
+				description,
+			</if>
+			<if test="ip != null">
+				ip,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="isFinal != null">
+				#{isFinal,jdbcType=INTEGER},
+			</if>
+			<if test="rank != null">
+				#{rank,jdbcType=BIGINT},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateTime != null">
+				#{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createBy != null">
+				#{createBy,jdbcType=BIGINT},
+			</if>
+			<if test="updateBy != null">
+				#{updateBy,jdbcType=BIGINT},
+			</if>
+			<if test="status != null">
+				#{status,jdbcType=TINYINT},
+			</if>
+			<if test="expireTime != null">
+				#{expireTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="description != null">
+				#{description,jdbcType=VARCHAR},
+			</if>
+			<if test="ip != null">
+				#{ip,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.chankin.model.entity.SysIpForbidden">
+		update sys_ip_forbidden
+		<set>
+			<if test="isFinal != null">
+				is_final = #{isFinal,jdbcType=INTEGER},
+			</if>
+			<if test="rank != null">
+				rank = #{rank,jdbcType=BIGINT},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateTime != null">
+				update_time = #{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createBy != null">
+				create_by = #{createBy,jdbcType=BIGINT},
+			</if>
+			<if test="updateBy != null">
+				update_by = #{updateBy,jdbcType=BIGINT},
+			</if>
+			<if test="status != null">
+				status = #{status,jdbcType=TINYINT},
+			</if>
+			<if test="expireTime != null">
+				expire_time = #{expireTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="description != null">
+				description = #{description,jdbcType=VARCHAR},
+			</if>
+			<if test="ip != null">
+				ip = #{ip,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.chankin.model.entity.SysIpForbidden">
+    update sys_ip_forbidden
+    set is_final = #{isFinal,jdbcType=INTEGER},
+      rank = #{rank,jdbcType=BIGINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      create_by = #{createBy,jdbcType=BIGINT},
+      update_by = #{updateBy,jdbcType=BIGINT},
+      status = #{status,jdbcType=TINYINT},
+      expire_time = #{expireTime,jdbcType=TIMESTAMP},
+      description = #{description,jdbcType=VARCHAR},
+      ip = #{ip,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" ?><!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.chankin.dao.SysRolePermissionMapper">
+	<resultMap id="BaseResultMap" type="com.chankin.model.entity.SysRolePermission">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="sys_permission_id" property="sysPermissionId" jdbcType="BIGINT" />
+		<result column="sys_role_id" property="sysRoleId" jdbcType="BIGINT" />
+		<result column="rank" property="rank" jdbcType="BIGINT" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="create_by" property="createBy" jdbcType="BIGINT" />
+		<result column="update_by" property="updateBy" jdbcType="BIGINT" />
+		<result column="status" property="status" jdbcType="TINYINT" />
+	</resultMap>
+	<sql id="Base_Column_List">
+    id, sys_permission_id, sys_role_id, rank, create_time, update_time, create_by, update_by, 
+    status
+  </sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from sys_role_permission
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from sys_role_permission
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+	<insert id="insert" parameterType="com.chankin.model.entity.SysRolePermission">
+		<selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		insert into sys_role_permission (sys_permission_id, sys_role_id, rank,
+		create_time, update_time, create_by,
+		update_by, status)
+		values (#{sysPermissionId,jdbcType=BIGINT}, #{sysRoleId,jdbcType=BIGINT}, #{rank,jdbcType=BIGINT},
+		#{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=BIGINT},
+		#{updateBy,jdbcType=BIGINT}, #{status,jdbcType=TINYINT})
+	</insert>
+	<insert id="insertSelective" parameterType="com.chankin.model.entity.SysRolePermission">
+		<selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		insert into sys_role_permission
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="sysPermissionId != null">
+				sys_permission_id,
+			</if>
+			<if test="sysRoleId != null">
+				sys_role_id,
+			</if>
+			<if test="rank != null">
+				rank,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+			<if test="updateTime != null">
+				update_time,
+			</if>
+			<if test="createBy != null">
+				create_by,
+			</if>
+			<if test="updateBy != null">
+				update_by,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="sysPermissionId != null">
+				#{sysPermissionId,jdbcType=BIGINT},
+			</if>
+			<if test="sysRoleId != null">
+				#{sysRoleId,jdbcType=BIGINT},
+			</if>
+			<if test="rank != null">
+				#{rank,jdbcType=BIGINT},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateTime != null">
+				#{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createBy != null">
+				#{createBy,jdbcType=BIGINT},
+			</if>
+			<if test="updateBy != null">
+				#{updateBy,jdbcType=BIGINT},
+			</if>
+			<if test="status != null">
+				#{status,jdbcType=TINYINT},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.chankin.model.entity.SysRolePermission">
+		update sys_role_permission
+		<set>
+			<if test="sysPermissionId != null">
+				sys_permission_id = #{sysPermissionId,jdbcType=BIGINT},
+			</if>
+			<if test="sysRoleId != null">
+				sys_role_id = #{sysRoleId,jdbcType=BIGINT},
+			</if>
+			<if test="rank != null">
+				rank = #{rank,jdbcType=BIGINT},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateTime != null">
+				update_time = #{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createBy != null">
+				create_by = #{createBy,jdbcType=BIGINT},
+			</if>
+			<if test="updateBy != null">
+				update_by = #{updateBy,jdbcType=BIGINT},
+			</if>
+			<if test="status != null">
+				status = #{status,jdbcType=TINYINT},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.chankin.model.entity.SysRolePermission">
+    update sys_role_permission
+    set sys_permission_id = #{sysPermissionId,jdbcType=BIGINT},
+      sys_role_id = #{sysRoleId,jdbcType=BIGINT},
+      rank = #{rank,jdbcType=BIGINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      create_by = #{createBy,jdbcType=BIGINT},
+      update_by = #{updateBy,jdbcType=BIGINT},
+      status = #{status,jdbcType=TINYINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+	<select id="selectByRoleId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+		select * from sys_role_permission where id = #{id,jdbcType=BIGINT}
+	</select>
+</mapper>

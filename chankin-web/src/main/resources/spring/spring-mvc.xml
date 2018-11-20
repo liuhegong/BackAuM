@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns="http://www.springframework.org/schema/beans"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+	<context:component-scan base-package="com.chankin.*">
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller" />
+	</context:component-scan>
+
+	<!--配置Spring采用cglib代理-->
+	<aop:aspectj-autoproxy proxy-target-class="true" />
+
+	<mvc:annotation-driven />
+
+	<mvc:default-servlet-handler />
+
+	<mvc:resources mapping="/static/**" location="/static/" />
+
+	<!--开启跨域支持-->
+	<mvc:cors>
+		<mvc:mapping path="/**" />
+	</mvc:cors>
+
+	<bean id="mappingJackson2HttpMessageConverter"
+		class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+		<property name="supportedMediaTypes">
+			<list>
+				<value>text/html;charset=UTF-8</value>
+				<value>text/json;charset=UTF-8</value>
+				<value>application/json;charset=UTF-8</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="internalResourceViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/jsp/" />
+		<property name="suffix" value=".jsp" />
+	</bean>
+
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="defaultEncoding" value="UTF-8" />
+		<property name="maxUploadSize" value="102400000" />
+	</bean>
+
+	<!--Standard xml based mvc config-->
+	<mvc:annotation-driven enable-matrix-variables="true" />
+
+	<!-- Enables swgger ui-->
+	<mvc:resources mapping="swagger-ui.html" location="classpath:/META-INF/resources/" />
+	<mvc:resources mapping="/webjars/**" location="classpath:/META-INF/resources/webjars/" />
+
+	<!-- Include a swagger configuration-->
+	<!--    <bean name="/applicationSwaggerConfig" class="com.hunt.system.swagger.SwaggerConfiguration"/>-->
+
+	<!--<mvc:interceptors>-->
+	<!--<mvc:interceptor>-->
+	<!--&lt;!&ndash; 匹配的是url路径， 如果不配置或/**,将拦截所有的Controller &ndash;&gt;-->
+	<!--<mvc:mapping path="/**" />-->
+	<!--<bean class="com.hunt.system.error.ErrorInterceptor"></bean>-->
+	<!--</mvc:interceptor>-->
+	<!--&lt;!&ndash; 当设置多个拦截器时，先按顺序调用preHandle方法，然后逆序调用每个拦截器的postHandle和afterCompletion方法 &ndash;&gt;-->
+	<!--</mvc:interceptors>-->
+
+</beans>

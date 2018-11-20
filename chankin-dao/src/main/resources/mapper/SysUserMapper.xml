@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8" ?><!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.chankin.dao.SysUserMapper">
+	<resultMap id="BaseResultMap" type="com.chankin.model.entity.SysUser">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="login_name" property="loginName" jdbcType="VARCHAR" />
+		<result column="zh_name" property="zhName" jdbcType="VARCHAR" />
+		<result column="en_name" property="enName" jdbcType="VARCHAR" />
+		<result column="sex" property="sex" jdbcType="INTEGER" />
+		<result column="birth" property="birth" jdbcType="VARCHAR" />
+		<result column="email" property="email" jdbcType="VARCHAR" />
+		<result column="phone" property="phone" jdbcType="VARCHAR" />
+		<result column="address" property="address" jdbcType="VARCHAR" />
+		<result column="password" property="password" jdbcType="VARCHAR" />
+		<result column="password_salt" property="passwordSalt" jdbcType="VARCHAR" />
+		<result column="rank" property="rank" jdbcType="BIGINT" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="create_by" property="createBy" jdbcType="BIGINT" />
+		<result column="update_by" property="updateBy" jdbcType="BIGINT" />
+		<result column="status" property="status" jdbcType="TINYINT" />
+		<result column="is_final" property="isFinal" jdbcType="TINYINT" />
+	</resultMap>
+	<sql id="Base_Column_List">
+    id, login_name, zh_name, en_name, sex, birth, email, phone, address, password, password_salt, 
+    rank, create_time, update_time, create_by, update_by, status, is_final
+  </sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from sys_user
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from sys_user
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+	<insert id="insert" parameterType="com.chankin.model.entity.SysUser">
+		<selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		insert into sys_user (login_name, zh_name, en_name,
+		sex, birth, email,
+		phone, address, password,
+		password_salt, rank, create_time,
+		update_time, create_by, update_by,
+		status, is_final)
+		values (#{loginName,jdbcType=VARCHAR}, #{zhName,jdbcType=VARCHAR}, #{enName,jdbcType=VARCHAR},
+		#{sex,jdbcType=INTEGER}, #{birth,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR},
+		#{phone,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR},
+		#{passwordSalt,jdbcType=VARCHAR}, #{rank,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP},
+		#{updateTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=BIGINT}, #{updateBy,jdbcType=BIGINT},
+		#{status,jdbcType=TINYINT}, #{isFinal,jdbcType=TINYINT})
+	</insert>
+	<insert id="insertSelective" parameterType="com.chankin.model.entity.SysUser">
+		<selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		insert into sys_user
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="loginName != null">
+				login_name,
+			</if>
+			<if test="zhName != null">
+				zh_name,
+			</if>
+			<if test="enName != null">
+				en_name,
+			</if>
+			<if test="sex != null">
+				sex,
+			</if>
+			<if test="birth != null">
+				birth,
+			</if>
+			<if test="email != null">
+				email,
+			</if>
+			<if test="phone != null">
+				phone,
+			</if>
+			<if test="address != null">
+				address,
+			</if>
+			<if test="password != null">
+				password,
+			</if>
+			<if test="passwordSalt != null">
+				password_salt,
+			</if>
+			<if test="rank != null">
+				rank,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+			<if test="updateTime != null">
+				update_time,
+			</if>
+			<if test="createBy != null">
+				create_by,
+			</if>
+			<if test="updateBy != null">
+				update_by,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+			<if test="isFinal != null">
+				is_final,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="loginName != null">
+				#{loginName,jdbcType=VARCHAR},
+			</if>
+			<if test="zhName != null">
+				#{zhName,jdbcType=VARCHAR},
+			</if>
+			<if test="enName != null">
+				#{enName,jdbcType=VARCHAR},
+			</if>
+			<if test="sex != null">
+				#{sex,jdbcType=INTEGER},
+			</if>
+			<if test="birth != null">
+				#{birth,jdbcType=VARCHAR},
+			</if>
+			<if test="email != null">
+				#{email,jdbcType=VARCHAR},
+			</if>
+			<if test="phone != null">
+				#{phone,jdbcType=VARCHAR},
+			</if>
+			<if test="address != null">
+				#{address,jdbcType=VARCHAR},
+			</if>
+			<if test="password != null">
+				#{password,jdbcType=VARCHAR},
+			</if>
+			<if test="passwordSalt != null">
+				#{passwordSalt,jdbcType=VARCHAR},
+			</if>
+			<if test="rank != null">
+				#{rank,jdbcType=BIGINT},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateTime != null">
+				#{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createBy != null">
+				#{createBy,jdbcType=BIGINT},
+			</if>
+			<if test="updateBy != null">
+				#{updateBy,jdbcType=BIGINT},
+			</if>
+			<if test="status != null">
+				#{status,jdbcType=TINYINT},
+			</if>
+			<if test="isFinal != null">
+				#{isFinal,jdbcType=TINYINT},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.chankin.model.entity.SysUser">
+		update sys_user
+		<set>
+			<if test="loginName != null">
+				login_name = #{loginName,jdbcType=VARCHAR},
+			</if>
+			<if test="zhName != null">
+				zh_name = #{zhName,jdbcType=VARCHAR},
+			</if>
+			<if test="enName != null">
+				en_name = #{enName,jdbcType=VARCHAR},
+			</if>
+			<if test="sex != null">
+				sex = #{sex,jdbcType=INTEGER},
+			</if>
+			<if test="birth != null">
+				birth = #{birth,jdbcType=VARCHAR},
+			</if>
+			<if test="email != null">
+				email = #{email,jdbcType=VARCHAR},
+			</if>
+			<if test="phone != null">
+				phone = #{phone,jdbcType=VARCHAR},
+			</if>
+			<if test="address != null">
+				address = #{address,jdbcType=VARCHAR},
+			</if>
+			<if test="password != null">
+				password = #{password,jdbcType=VARCHAR},
+			</if>
+			<if test="passwordSalt != null">
+				password_salt = #{passwordSalt,jdbcType=VARCHAR},
+			</if>
+			<if test="rank != null">
+				rank = #{rank,jdbcType=BIGINT},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateTime != null">
+				update_time = #{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createBy != null">
+				create_by = #{createBy,jdbcType=BIGINT},
+			</if>
+			<if test="updateBy != null">
+				update_by = #{updateBy,jdbcType=BIGINT},
+			</if>
+			<if test="status != null">
+				status = #{status,jdbcType=TINYINT},
+			</if>
+			<if test="isFinal != null">
+				is_final = #{isFinal,jdbcType=TINYINT},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.chankin.model.entity.SysUser">
+    update sys_user
+    set login_name = #{loginName,jdbcType=VARCHAR},
+      zh_name = #{zhName,jdbcType=VARCHAR},
+      en_name = #{enName,jdbcType=VARCHAR},
+      sex = #{sex,jdbcType=INTEGER},
+      birth = #{birth,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
+      password = #{password,jdbcType=VARCHAR},
+      password_salt = #{passwordSalt,jdbcType=VARCHAR},
+      rank = #{rank,jdbcType=BIGINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      create_by = #{createBy,jdbcType=BIGINT},
+      update_by = #{updateBy,jdbcType=BIGINT},
+      status = #{status,jdbcType=TINYINT},
+      is_final = #{isFinal,jdbcType=TINYINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+	<select id="selectUserByLoginName" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select * from sys_user where status != 2 and login_name =#{loginName}
+	</select>
+
+</mapper>

@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8" ?><!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.chankin.dao.SysLogMapper">
+	<resultMap id="BaseResultMap" type="com.chankin.model.entity.SysLog">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="rank" property="rank" jdbcType="BIGINT" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="create_by" property="createBy" jdbcType="BIGINT" />
+		<result column="update_by" property="updateBy" jdbcType="BIGINT" />
+		<result column="status" property="status" jdbcType="TINYINT" />
+		<result column="ip" property="ip" jdbcType="VARCHAR" />
+		<result column="user_id" property="userId" jdbcType="VARCHAR" />
+		<result column="method" property="method" jdbcType="VARCHAR" />
+		<result column="duration" property="duration" jdbcType="BIGINT" />
+		<result column="url" property="url" jdbcType="VARCHAR" />
+		<result column="user_agent" property="userAgent" jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap id="ResultMapWithBLOBs" type="com.chankin.model.entity.SysLogWithBLOBs" extends="BaseResultMap">
+		<result column="param" property="param" jdbcType="LONGVARCHAR" />
+		<result column="result" property="result" jdbcType="LONGVARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+    id, rank, create_time, update_time, create_by, update_by, status, ip, user_id, method, 
+    duration, url, user_agent
+  </sql>
+	<sql id="Blob_Column_List">
+    param, result
+  </sql>
+	<select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from sys_log
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from sys_log
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+	<insert id="insert" parameterType="com.chankin.model.entity.SysLogWithBLOBs">
+		<selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		insert into sys_log (rank, create_time, update_time,
+		create_by, update_by, status,
+		ip, user_id, method,
+		duration, url, user_agent,
+		param, result)
+		values (#{rank,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP},
+		#{createBy,jdbcType=BIGINT}, #{updateBy,jdbcType=BIGINT}, #{status,jdbcType=TINYINT},
+		#{ip,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, #{method,jdbcType=VARCHAR},
+		#{duration,jdbcType=BIGINT}, #{url,jdbcType=VARCHAR}, #{userAgent,jdbcType=VARCHAR},
+		#{param,jdbcType=LONGVARCHAR}, #{result,jdbcType=LONGVARCHAR})
+	</insert>
+	<insert id="insertSelective" parameterType="com.chankin.model.entity.SysLogWithBLOBs">
+		<selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		insert into sys_log
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="rank != null">
+				rank,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+			<if test="updateTime != null">
+				update_time,
+			</if>
+			<if test="createBy != null">
+				create_by,
+			</if>
+			<if test="updateBy != null">
+				update_by,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+			<if test="ip != null">
+				ip,
+			</if>
+			<if test="userId != null">
+				user_id,
+			</if>
+			<if test="method != null">
+				method,
+			</if>
+			<if test="duration != null">
+				duration,
+			</if>
+			<if test="url != null">
+				url,
+			</if>
+			<if test="userAgent != null">
+				user_agent,
+			</if>
+			<if test="param != null">
+				param,
+			</if>
+			<if test="result != null">
+				result,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="rank != null">
+				#{rank,jdbcType=BIGINT},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateTime != null">
+				#{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createBy != null">
+				#{createBy,jdbcType=BIGINT},
+			</if>
+			<if test="updateBy != null">
+				#{updateBy,jdbcType=BIGINT},
+			</if>
+			<if test="status != null">
+				#{status,jdbcType=TINYINT},
+			</if>
+			<if test="ip != null">
+				#{ip,jdbcType=VARCHAR},
+			</if>
+			<if test="userId != null">
+				#{userId,jdbcType=VARCHAR},
+			</if>
+			<if test="method != null">
+				#{method,jdbcType=VARCHAR},
+			</if>
+			<if test="duration != null">
+				#{duration,jdbcType=BIGINT},
+			</if>
+			<if test="url != null">
+				#{url,jdbcType=VARCHAR},
+			</if>
+			<if test="userAgent != null">
+				#{userAgent,jdbcType=VARCHAR},
+			</if>
+			<if test="param != null">
+				#{param,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="result != null">
+				#{result,jdbcType=LONGVARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.chankin.model.entity.SysLogWithBLOBs">
+		update sys_log
+		<set>
+			<if test="rank != null">
+				rank = #{rank,jdbcType=BIGINT},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateTime != null">
+				update_time = #{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createBy != null">
+				create_by = #{createBy,jdbcType=BIGINT},
+			</if>
+			<if test="updateBy != null">
+				update_by = #{updateBy,jdbcType=BIGINT},
+			</if>
+			<if test="status != null">
+				status = #{status,jdbcType=TINYINT},
+			</if>
+			<if test="ip != null">
+				ip = #{ip,jdbcType=VARCHAR},
+			</if>
+			<if test="userId != null">
+				user_id = #{userId,jdbcType=VARCHAR},
+			</if>
+			<if test="method != null">
+				method = #{method,jdbcType=VARCHAR},
+			</if>
+			<if test="duration != null">
+				duration = #{duration,jdbcType=BIGINT},
+			</if>
+			<if test="url != null">
+				url = #{url,jdbcType=VARCHAR},
+			</if>
+			<if test="userAgent != null">
+				user_agent = #{userAgent,jdbcType=VARCHAR},
+			</if>
+			<if test="param != null">
+				param = #{param,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="result != null">
+				result = #{result,jdbcType=LONGVARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKeyWithBLOBs" parameterType="com.chankin.model.entity.SysLogWithBLOBs">
+    update sys_log
+    set rank = #{rank,jdbcType=BIGINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      create_by = #{createBy,jdbcType=BIGINT},
+      update_by = #{updateBy,jdbcType=BIGINT},
+      status = #{status,jdbcType=TINYINT},
+      ip = #{ip,jdbcType=VARCHAR},
+      user_id = #{userId,jdbcType=VARCHAR},
+      method = #{method,jdbcType=VARCHAR},
+      duration = #{duration,jdbcType=BIGINT},
+      url = #{url,jdbcType=VARCHAR},
+      user_agent = #{userAgent,jdbcType=VARCHAR},
+      param = #{param,jdbcType=LONGVARCHAR},
+      result = #{result,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+	<update id="updateByPrimaryKey" parameterType="com.chankin.model.entity.SysLog">
+    update sys_log
+    set rank = #{rank,jdbcType=BIGINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      create_by = #{createBy,jdbcType=BIGINT},
+      update_by = #{updateBy,jdbcType=BIGINT},
+      status = #{status,jdbcType=TINYINT},
+      ip = #{ip,jdbcType=VARCHAR},
+      user_id = #{userId,jdbcType=VARCHAR},
+      method = #{method,jdbcType=VARCHAR},
+      duration = #{duration,jdbcType=BIGINT},
+      url = #{url,jdbcType=VARCHAR},
+      user_agent = #{userAgent,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8" ?><!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.chankin.dao.SysLoginStatusMapper">
+	<resultMap id="BaseResultMap" type="com.chankin.model.entity.SysLoginStatus">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="sys_user_id" property="sysUserId" jdbcType="BIGINT" />
+		<result column="session_id" property="sessionId" jdbcType="VARCHAR" />
+		<result column="session_expires" property="sessionExpires" jdbcType="TIMESTAMP" />
+		<result column="sys_user_login_name" property="sysUserLoginName" jdbcType="VARCHAR" />
+		<result column="sys_user_zh_name" property="sysUserZhName" jdbcType="VARCHAR" />
+		<result column="last_login_time" property="lastLoginTime" jdbcType="TIMESTAMP" />
+		<result column="platform" property="platform" jdbcType="TINYINT" />
+		<result column="rank" property="rank" jdbcType="BIGINT" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="create_by" property="createBy" jdbcType="BIGINT" />
+		<result column="update_by" property="updateBy" jdbcType="BIGINT" />
+		<result column="status" property="status" jdbcType="TINYINT" />
+	</resultMap>
+	<sql id="Base_Column_List">
+    id, sys_user_id, session_id, session_expires, sys_user_login_name, sys_user_zh_name, 
+    last_login_time, platform, rank, create_time, update_time, create_by, update_by, 
+    status
+  </sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from sys_login_status
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from sys_login_status
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+	<insert id="insert" parameterType="com.chankin.model.entity.SysLoginStatus">
+		<selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		insert into sys_login_status (sys_user_id, session_id, session_expires,
+		sys_user_login_name, sys_user_zh_name, last_login_time,
+		platform, rank, create_time,
+		update_time, create_by, update_by,
+		status)
+		values (#{sysUserId,jdbcType=BIGINT}, #{sessionId,jdbcType=VARCHAR}, #{sessionExpires,jdbcType=TIMESTAMP},
+		#{sysUserLoginName,jdbcType=VARCHAR}, #{sysUserZhName,jdbcType=VARCHAR}, #{lastLoginTime,jdbcType=TIMESTAMP},
+		#{platform,jdbcType=TINYINT}, #{rank,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP},
+		#{updateTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=BIGINT}, #{updateBy,jdbcType=BIGINT},
+		#{status,jdbcType=TINYINT})
+	</insert>
+	<insert id="insertSelective" parameterType="com.chankin.model.entity.SysLoginStatus">
+		<selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		insert into sys_login_status
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="sysUserId != null">
+				sys_user_id,
+			</if>
+			<if test="sessionId != null">
+				session_id,
+			</if>
+			<if test="sessionExpires != null">
+				session_expires,
+			</if>
+			<if test="sysUserLoginName != null">
+				sys_user_login_name,
+			</if>
+			<if test="sysUserZhName != null">
+				sys_user_zh_name,
+			</if>
+			<if test="lastLoginTime != null">
+				last_login_time,
+			</if>
+			<if test="platform != null">
+				platform,
+			</if>
+			<if test="rank != null">
+				rank,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+			<if test="updateTime != null">
+				update_time,
+			</if>
+			<if test="createBy != null">
+				create_by,
+			</if>
+			<if test="updateBy != null">
+				update_by,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="sysUserId != null">
+				#{sysUserId,jdbcType=BIGINT},
+			</if>
+			<if test="sessionId != null">
+				#{sessionId,jdbcType=VARCHAR},
+			</if>
+			<if test="sessionExpires != null">
+				#{sessionExpires,jdbcType=TIMESTAMP},
+			</if>
+			<if test="sysUserLoginName != null">
+				#{sysUserLoginName,jdbcType=VARCHAR},
+			</if>
+			<if test="sysUserZhName != null">
+				#{sysUserZhName,jdbcType=VARCHAR},
+			</if>
+			<if test="lastLoginTime != null">
+				#{lastLoginTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="platform != null">
+				#{platform,jdbcType=TINYINT},
+			</if>
+			<if test="rank != null">
+				#{rank,jdbcType=BIGINT},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateTime != null">
+				#{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createBy != null">
+				#{createBy,jdbcType=BIGINT},
+			</if>
+			<if test="updateBy != null">
+				#{updateBy,jdbcType=BIGINT},
+			</if>
+			<if test="status != null">
+				#{status,jdbcType=TINYINT},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.chankin.model.entity.SysLoginStatus">
+		update sys_login_status
+		<set>
+			<if test="sysUserId != null">
+				sys_user_id = #{sysUserId,jdbcType=BIGINT},
+			</if>
+			<if test="sessionId != null">
+				session_id = #{sessionId,jdbcType=VARCHAR},
+			</if>
+			<if test="sessionExpires != null">
+				session_expires = #{sessionExpires,jdbcType=TIMESTAMP},
+			</if>
+			<if test="sysUserLoginName != null">
+				sys_user_login_name = #{sysUserLoginName,jdbcType=VARCHAR},
+			</if>
+			<if test="sysUserZhName != null">
+				sys_user_zh_name = #{sysUserZhName,jdbcType=VARCHAR},
+			</if>
+			<if test="lastLoginTime != null">
+				last_login_time = #{lastLoginTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="platform != null">
+				platform = #{platform,jdbcType=TINYINT},
+			</if>
+			<if test="rank != null">
+				rank = #{rank,jdbcType=BIGINT},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateTime != null">
+				update_time = #{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createBy != null">
+				create_by = #{createBy,jdbcType=BIGINT},
+			</if>
+			<if test="updateBy != null">
+				update_by = #{updateBy,jdbcType=BIGINT},
+			</if>
+			<if test="status != null">
+				status = #{status,jdbcType=TINYINT},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.chankin.model.entity.SysLoginStatus">
+    update sys_login_status
+    set sys_user_id = #{sysUserId,jdbcType=BIGINT},
+      session_id = #{sessionId,jdbcType=VARCHAR},
+      session_expires = #{sessionExpires,jdbcType=TIMESTAMP},
+      sys_user_login_name = #{sysUserLoginName,jdbcType=VARCHAR},
+      sys_user_zh_name = #{sysUserZhName,jdbcType=VARCHAR},
+      last_login_time = #{lastLoginTime,jdbcType=TIMESTAMP},
+      platform = #{platform,jdbcType=TINYINT},
+      rank = #{rank,jdbcType=BIGINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      create_by = #{createBy,jdbcType=BIGINT},
+      update_by = #{updateBy,jdbcType=BIGINT},
+      status = #{status,jdbcType=TINYINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

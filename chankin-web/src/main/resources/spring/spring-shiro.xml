@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.springframework.org/schema/beans"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!-- securityManager安全管理器 -->
+
+	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+		<property name="realms">
+			<list>
+				<ref bean="shiroRealm" />
+			</list>
+		</property>
+	</bean>
+
+	<bean name="shiroRealm" class="com.chankin.system.security.shiro.ShiroRealm">
+		<property name="credentialsMatcher" ref="credentialsMatcher" />
+	</bean>
+
+	<bean id="credentialsMatcher" class="org.apache.shiro.authc.credential.HashedCredentialsMatcher">
+		<property name="hashAlgorithmName" value="md5" />
+		<property name="hashIterations" value="2" />
+	</bean>
+
+	<bean id="cacheManager" class="com.chankin.system.security.shiro.RedisCacheManager">
+		<property name="redisTemplate" ref="redisTemplate" />
+	</bean>
+
+	<bean id="redisSessionDAO" class="com.chankin.system.security.shiro.RedisSessionDao" />
+
+	<!--session管理器-->
+	<bean id="sessionManager" class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">
+		<property name="globalSessionTimeout" value="2592000000" />
+		<property name="sessionValidationSchedulerEnabled" value="true" />
+		<property name="sessionDAO" ref="redisSessionDAO" />
+	</bean>
+
+	<!--过滤器-->
+	<!--
+		<bean id="authenticationFilter" class="com.chankin.system.security.shiro.ShiroAuthenticationFilter"/>
+	-->
+
+	<bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor" />
+	<bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"
+		depends-on="lifecycleBeanPostProcessor" />
+	<bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
+		<property name="securityManager" ref="securityManager" />
+	</bean>
+	<!--
+
+		<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+			<property name="securityManager" ref="securityManager"/>
+			<property name="loginUrl" value="/"/>
+			<property name="filters">
+				<map>
+					&lt;!&ndash;<entry key="authc" value-ref="authorizationFilter"/>&ndash;&gt;
+					<entry key="authc" value-ref="authenticationFilter"/>
+				</map>
+			</property>
+			<property name="filterChainDefinitions">
+				<value>
+					/system/captcha=anon
+					/static/**=anon
+					/system/logout = anon
+					/system/login=anon
+					/oauth/**=anon
+					/error/**=anon
+					/v2/**/=anon
+					/webjars/**=anon
+					/swagger-resources/**=anon
+					/swagger-ui.html/**=anon
+					/system/welcome=authc
+					/**=authc
+				</value>
+			</property>
+		</bean>
+	-->
+
+
+</beans>

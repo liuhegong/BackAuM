@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>com.chankin.BackAuM</groupId>
+	<artifactId>chankin</artifactId>
+	<version>1.0-SNAPSHOT</version>
+	<packaging>pom</packaging>
+	<name>chankin</name>
+	<modules>
+		<module>chankin-parent</module>
+		<module>chankin-common</module>
+		<module>chankin-model</module>
+		<module>chankin-dao</module>
+		<module>chankin-web</module>
+		<module>chankin-service</module>
+	</modules>
+
+</project>

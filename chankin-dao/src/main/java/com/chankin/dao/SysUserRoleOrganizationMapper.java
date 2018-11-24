@@ -19,4 +19,8 @@ public interface SysUserRoleOrganizationMapper {
     int updateByPrimaryKey(SysUserRoleOrganization record);
 
     List<SysUserRoleOrganization> selectByUserId(@Param("userId") Long userId);
+
+    void deleteByUserId(@Param("userId") Long userId);
+
+    List<Long> selectByRoleOrganizationId(@Param("roleOrganizationId") long roleOrganizationId);
 }

@@ -25,10 +25,25 @@
 		from sys_permission
 		where id = #{id,jdbcType=BIGINT}
 	</select>
+
+	<select id="selectAll" resultType="SysPermission">
+        SELECT *
+        FROM sys_permission
+        WHERE status = 1
+        ORDER BY sys_permission_group_id
+    </select>
+
 	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from sys_permission
     where id = #{id,jdbcType=BIGINT}
   </delete>
+
+	<select id="selectCounts" resultType="integer">
+        SELECT count(*)
+        FROM sys_permission
+        WHERE status = 1
+    </select>
+
 	<insert id="insert" parameterType="com.chankin.model.entity.SysPermission">
 		<selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
 			SELECT LAST_INSERT_ID()
@@ -42,10 +57,8 @@
 		#{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=BIGINT},
 		#{updateBy,jdbcType=BIGINT}, #{status,jdbcType=TINYINT})
 	</insert>
-	<insert id="insertSelective" parameterType="com.chankin.model.entity.SysPermission">
-		<selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
-			SELECT LAST_INSERT_ID()
-		</selectKey>
+	<insert id="insertSelective" parameterType="com.chankin.model.entity.SysPermission" useGeneratedKeys="true"
+		keyProperty="id">
 		insert into sys_permission
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="name != null">
@@ -118,6 +131,7 @@
 			</if>
 		</trim>
 	</insert>
+
 	<update id="updateByPrimaryKeySelective" parameterType="com.chankin.model.entity.SysPermission">
 		update sys_permission
 		<set>
@@ -155,7 +169,7 @@
 				status = #{status,jdbcType=TINYINT},
 			</if>
 		</set>
-		where id = #{id,jdbcType=BIGINT}
+		where id = #{id,jdbcType=BIGINT} and status =1
 	</update>
 	<update id="updateByPrimaryKey" parameterType="com.chankin.model.entity.SysPermission">
     update sys_permission
@@ -172,6 +186,22 @@
       status = #{status,jdbcType=TINYINT}
     where id = #{id,jdbcType=BIGINT}
   </update>
+
+	<select id="isExistNameExcludeId" resultType="java.lang.Boolean">
+        SELECT exists(
+                SELECT *
+                FROM sys_permission
+                WHERE status = 1 AND name = #{name} AND sys_permission_group_id = #{groupId} AND id != #{id}
+        )
+    </select>
+	<select id="isExistCodeExcludeId" resultType="java.lang.Boolean">
+        SELECT exists(
+                SELECT *
+                FROM sys_permission
+                WHERE status = 1 AND code = #{code} AND sys_permission_group_id = #{groupId} AND id != #{id}
+        )
+    </select>
+
 	<select id="selectById" parameterType="long" resultType="SysPermission">
         SELECT *
         FROM sys_permission

@@ -28,6 +28,11 @@
 		from sys_login_status
 		where id = #{id,jdbcType=BIGINT}
 	</select>
+
+	<select id="selectByUserIdAndPlatform" resultType="SysLoginStatus">
+		select * from sys_login_status where status = 1 and sys_user_id = #{userId} and platform = #{platform}
+	</select>
+
 	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from sys_login_status
     where id = #{id,jdbcType=BIGINT}
@@ -178,7 +183,7 @@
 				status = #{status,jdbcType=TINYINT},
 			</if>
 		</set>
-		where id = #{id,jdbcType=BIGINT}
+		where id = #{id,jdbcType=BIGINT} and status = 1
 	</update>
 	<update id="updateByPrimaryKey" parameterType="com.chankin.model.entity.SysLoginStatus">
     update sys_login_status
@@ -197,4 +202,16 @@
       status = #{status,jdbcType=TINYINT}
     where id = #{id,jdbcType=BIGINT}
   </update>
+	<select id="selectByUserId" parameterType="java.lang.Long" resultType="com.chankin.model.entity.SysLoginStatus">
+		select * from sys_login_status where status = 1 and sys_user_id = #{userId}
+	</select>
+	<select id="selectCounts" resultType="integer">
+		select count(*) from sys_login_status where status = 1
+	</select>
+
+	<select id="selectAll" resultType="SysLoginStatus">
+		select * from sys_login_status where status = 1
+	</select>
+
+
 </mapper>

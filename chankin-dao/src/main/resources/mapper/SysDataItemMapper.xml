@@ -23,12 +23,16 @@
 		select
 		<include refid="Base_Column_List" />
 		from sys_data_item
-		where id = #{id,jdbcType=BIGINT}
+		where id = #{id,jdbcType=BIGINT} and status = 1
 	</select>
 	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from sys_data_item
     where id = #{id,jdbcType=BIGINT}
   </delete>
+
+	<select id="selectCounts" resultType="integer">
+		selet count(*) from sys_data_item where status = 1
+	</select>
 	<insert id="insert" parameterType="com.chankin.model.entity.SysDataItem">
 		<selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
 			SELECT LAST_INSERT_ID()
@@ -42,10 +46,9 @@
 		#{updateTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=BIGINT}, #{updateBy,jdbcType=BIGINT},
 		#{status,jdbcType=TINYINT}, #{description,jdbcType=VARCHAR})
 	</insert>
-	<insert id="insertSelective" parameterType="com.chankin.model.entity.SysDataItem">
-		<selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
-			SELECT LAST_INSERT_ID()
-		</selectKey>
+	<insert id="insertSelective" keyProperty="id" parameterType="com.chankin.model.entity.SysDataItem"
+		useGeneratedKeys="true">
+
 		insert into sys_data_item
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="sysDataGroupId != null">
@@ -155,7 +158,7 @@
 				description = #{description,jdbcType=VARCHAR},
 			</if>
 		</set>
-		where id = #{id,jdbcType=BIGINT}
+		where id = #{id,jdbcType=BIGINT} and status = 1
 	</update>
 	<update id="updateByPrimaryKey" parameterType="com.chankin.model.entity.SysDataItem">
     update sys_data_item
@@ -172,7 +175,32 @@
       description = #{description,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
+
 	<select id="selectByKey" resultType="java.lang.String">
-		select key_value from sys_data_item where status = 1 and key_name = #{key} and sys_data_group_id= #{groupId}
+        SELECT key_value
+        FROM sys_data_item
+        WHERE status = 1 AND key_name = #{key} AND sys_data_group_id = #{groupId}
+    </select>
+
+	<select id="isExistName" resultType="java.lang.Boolean">
+		select exists( select * from sys_data_item where status =1 and key_name = #{key} and groupId =#{groupId} )
 	</select>
+	<select id="selectAll" resultType="SysDataItem">
+		select select * from sys_data_item where status =1
+	</select>
+
+	<update id="deleteById">
+        UPDATE sys_data_item
+        SET status = 2
+        WHERE id = #{id}
+    </update>
+
+	<select id="isExistDataItemNameExcludeId" resultType="java.lang.Boolean">
+        SELECT exists(
+                SELECT *
+                FROM sys_data_item
+                WHERE status = 1 AND id != #{id} AND key_name = #{key} AND sys_data_group_id = #{groupId}
+        )
+	</select>
+
 </mapper>

@@ -2,37 +2,36 @@
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.chankin.dao.SysRoleOrganizationMapper">
 	<resultMap id="BaseResultMap" type="com.chankin.model.entity.SysRoleOrganization">
-		<id column="id" property="id" jdbcType="BIGINT" />
-		<result column="sys_organization_id" property="sysOrganizationId" jdbcType="BIGINT" />
-		<result column="sys_role_id" property="sysRoleId" jdbcType="BIGINT" />
-		<result column="parent_id" property="parentId" jdbcType="BIGINT" />
-		<result column="name" property="name" jdbcType="VARCHAR" />
-		<result column="full_name" property="fullName" jdbcType="VARCHAR" />
-		<result column="description" property="description" jdbcType="VARCHAR" />
-		<result column="rank" property="rank" jdbcType="BIGINT" />
-		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
-		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
-		<result column="create_by" property="createBy" jdbcType="BIGINT" />
-		<result column="update_by" property="updateBy" jdbcType="BIGINT" />
-		<result column="status" property="status" jdbcType="TINYINT" />
-		<result column="is_final" property="isFinal" jdbcType="TINYINT" />
+		<id column="id" jdbcType="BIGINT" property="id" />
+		<result column="sys_organization_id" jdbcType="BIGINT" property="sysOrganizationId" />
+		<result column="sys_role_id" jdbcType="BIGINT" property="sysRoleId" />
+		<result column="parent_id" jdbcType="BIGINT" property="parentId" />
+		<result column="name" jdbcType="VARCHAR" property="name" />
+		<result column="full_name" jdbcType="VARCHAR" property="fullName" />
+		<result column="description" jdbcType="VARCHAR" property="description" />
+		<result column="rank" jdbcType="BIGINT" property="rank" />
+		<result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+		<result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+		<result column="create_by" jdbcType="BIGINT" property="createBy" />
+		<result column="update_by" jdbcType="BIGINT" property="updateBy" />
+		<result column="status" jdbcType="TINYINT" property="status" />
+		<result column="is_final" jdbcType="TINYINT" property="isFinal" />
 	</resultMap>
 	<sql id="Base_Column_List">
     id, sys_organization_id, sys_role_id, parent_id, name, full_name, description, rank, 
     create_time, update_time, create_by, update_by, status, is_final
   </sql>
-	<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
-		select
-		<include refid="Base_Column_List" />
-		from sys_role_organization
-		where sys_organization_id = #{sysRoleOrganizationId,jdbcType=BIGINT}
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long" resultType="SysRoleOrganization">
+	   SELECT *
+        FROM sys_role_organization
+        WHERE id = #{id} AND status = 1
 	</select>
 	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from sys_role_organization
     where id = #{id,jdbcType=BIGINT}
   </delete>
 	<insert id="insert" parameterType="com.chankin.model.entity.SysRoleOrganization">
-		<selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
+		<selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
 			SELECT LAST_INSERT_ID()
 		</selectKey>
 		insert into sys_role_organization (sys_organization_id, sys_role_id, parent_id,
@@ -46,10 +45,8 @@
 		#{createBy,jdbcType=BIGINT}, #{updateBy,jdbcType=BIGINT}, #{status,jdbcType=TINYINT},
 		#{isFinal,jdbcType=TINYINT})
 	</insert>
-	<insert id="insertSelective" parameterType="com.chankin.model.entity.SysRoleOrganization">
-		<selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
-			SELECT LAST_INSERT_ID()
-		</selectKey>
+	<insert id="insertSelective" keyProperty="id" parameterType="com.chankin.model.entity.SysRoleOrganization"
+		useGeneratedKeys="true">
 		insert into sys_role_organization
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="sysOrganizationId != null">
@@ -177,7 +174,7 @@
 				is_final = #{isFinal,jdbcType=TINYINT},
 			</if>
 		</set>
-		where id = #{id,jdbcType=BIGINT}
+		where id = #{id,jdbcType=BIGINT} and status = 1
 	</update>
 	<update id="updateByPrimaryKey" parameterType="com.chankin.model.entity.SysRoleOrganization">
     update sys_role_organization
@@ -196,4 +193,26 @@
       is_final = #{isFinal,jdbcType=TINYINT}
     where id = #{id,jdbcType=BIGINT}
   </update>
+
+	<select id="isExistName" resultType="java.lang.Boolean">
+		select exists (select * from sys_role_organization status = 1 and name = #{name} and parentId = #{parentId})
+	</select>
+
+	<select id="isExistNameExcludeId" resultType="java.lang.Boolean">
+		select exists (select * from sys_role_organization status = 1 and name = #{name} and parentId = #{parentId}) and id !=#{id}
+	</select>
+
+	<select id="selectCounts" resultType="integer">
+		select count(*) from sys_role_organization where status = 1
+	</select>
+
+	<select id="selectChildren" resultType="SysRoleOrganization">
+		select * from sys_role_organization where status = 1 and parentId = #{parentId}
+	</select>
+
+	<select id="selectByRoleId" resultType="long">
+        SELECT id FROM sys_role_organization WHERE status = 1 AND sys_role_id = #{roleId}
+    </select>
+
+
 </mapper>

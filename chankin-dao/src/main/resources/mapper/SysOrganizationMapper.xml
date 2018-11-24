@@ -23,12 +23,12 @@
 		select
 		<include refid="Base_Column_List" />
 		from sys_organization
-		where id = #{id,jdbcType=BIGINT}
+		where id = #{id,jdbcType=BIGINT} and status = 1
 	</select>
-	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+	<update id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from sys_organization
     where id = #{id,jdbcType=BIGINT}
-  </delete>
+  </update>
 	<insert id="insert" parameterType="com.chankin.model.entity.SysOrganization">
 		<selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
 			SELECT LAST_INSERT_ID()
@@ -42,10 +42,9 @@
 		#{updateTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=BIGINT}, #{updateBy,jdbcType=BIGINT},
 		#{status,jdbcType=TINYINT}, #{fullName,jdbcType=VARCHAR})
 	</insert>
-	<insert id="insertSelective" parameterType="com.chankin.model.entity.SysOrganization">
-		<selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
-			SELECT LAST_INSERT_ID()
-		</selectKey>
+	<insert id="insertSelective" parameterType="com.chankin.model.entity.SysOrganization" useGeneratedKeys="true"
+		keyProperty="id">
+
 		insert into sys_organization
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="name != null">
@@ -118,6 +117,13 @@
 			</if>
 		</trim>
 	</insert>
+
+	<select id="selectChildren" resultType="SysOrganization">
+        SELECT *
+        FROM sys_organization
+        WHERE status = 1 AND parent_id = #{parentId}
+    </select>
+
 	<update id="updateByPrimaryKeySelective" parameterType="com.chankin.model.entity.SysOrganization">
 		update sys_organization
 		<set>
@@ -172,4 +178,22 @@
       full_name = #{fullName,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
+
+	<select id="isExistFullName" resultType="java.lang.Boolean">
+		select exists(select * from sys_organization where status =1 and full_name = #{fullName})
+	</select>
+
+	<select id="isExistFullNameExcludeId" resultType="java.lang.Boolean">
+        SELECT exists(
+                SELECT *
+                FROM sys_organization
+                WHERE status = 1 AND id != #{id} AND full_name = #{fullName}
+        )
+    </select>
+
+	<select id="selectCounts" resultType="integer">
+        SELECT count(*)
+        FROM sys_organization
+        WHERE status = 1
+    </select>
 </mapper>

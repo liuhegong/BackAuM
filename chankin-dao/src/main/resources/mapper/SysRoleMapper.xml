@@ -21,7 +21,12 @@
 		select
 		<include refid="Base_Column_List" />
 		from sys_role
-		where id = #{id,jdbcType=BIGINT}
+		where id = #{id,jdbcType=BIGINT} and status = 1
+	</select>
+	<select id="selectCounts" resultType="integer">
+		select count(*)
+		from sys_role
+		where status = 1
 	</select>
 	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from sys_role
@@ -40,10 +45,9 @@
 		#{createBy,jdbcType=BIGINT}, #{updateBy,jdbcType=BIGINT}, #{status,jdbcType=TINYINT}
 		)
 	</insert>
-	<insert id="insertSelective" parameterType="com.chankin.model.entity.SysRole">
-		<selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
-			SELECT LAST_INSERT_ID()
-		</selectKey>
+	<insert id="insertSelective" parameterType="com.chankin.model.entity.SysRole" useGeneratedKeys="true"
+		keyProperty="id">
+
 		insert into sys_role
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="description != null">
@@ -135,7 +139,7 @@
 				status = #{status,jdbcType=TINYINT},
 			</if>
 		</set>
-		where id = #{id,jdbcType=BIGINT}
+		where id = #{id,jdbcType=BIGINT} and status = 1
 	</update>
 	<update id="updateByPrimaryKey" parameterType="com.chankin.model.entity.SysRole">
     update sys_role
@@ -150,4 +154,19 @@
       status = #{status,jdbcType=TINYINT}
     where id = #{id,jdbcType=BIGINT}
   </update>
+	<select id="isExsitNameExcludeId" resultType="java.lang.Boolean">
+        SELECT exists(
+                SELECT *
+                FROM sys_role
+                WHERE status = 1 AND id != #{id} AND name = #{name}
+        )
+    </select>
+
+	<select id="isExistName" resultType="java.lang.Boolean">
+		select exists(select * from sys_role where status = 1 and name = #{name})
+	</select>
+
+	<select id="selectAll" resultType="SysRole">
+		select * from sys_role where status = 1
+	</select>
 </mapper>

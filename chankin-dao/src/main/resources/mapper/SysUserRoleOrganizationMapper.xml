@@ -151,7 +151,18 @@
     where id = #{id,jdbcType=BIGINT}
   </update>
 	<select id="selectByUserId" resultType="SysUserRoleOrganization">
-		select * from sys_user organization where status = 1 and sys_user_id = #{userId}
+		select * from sys_user_role_organization where status = 1 and sys_user_id = #{userId}
 	</select>
+	<update id="deleteByUserId" parameterType="java.lang.Long">
+		UPDATE sysy_user_role_organization   SET status = 2
+        WHERE sys_user_id = #{userId}
+	</update>
+
+	<select id="selectByRoleOrganizationId" resultType="java.lang.Long">
+        SELECT sys_user_id
+        FROM sys_user_role_organization
+        WHERE status = 1 AND sys_role_organization_id = #{roleOrganizationId}
+    </select>
+
 
 </mapper>

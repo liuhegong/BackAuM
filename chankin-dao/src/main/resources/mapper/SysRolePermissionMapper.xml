@@ -37,10 +37,8 @@
 		#{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=BIGINT},
 		#{updateBy,jdbcType=BIGINT}, #{status,jdbcType=TINYINT})
 	</insert>
-	<insert id="insertSelective" parameterType="com.chankin.model.entity.SysRolePermission">
-		<selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
-			SELECT LAST_INSERT_ID()
-		</selectKey>
+	<insert id="insertSelective" parameterType="com.chankin.model.entity.SysRolePermission" useGeneratedKeys="true"
+		keyProperty="id">
 		insert into sys_role_permission
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="sysPermissionId != null">
@@ -140,4 +138,10 @@
 	<select id="selectByRoleId" parameterType="java.lang.Long" resultMap="BaseResultMap">
 		select * from sys_role_permission where id = #{id,jdbcType=BIGINT}
 	</select>
+
+	<update id="deleteByRoleId">
+        UPDATE sys_role_permission
+        SET status = 2
+        WHERE sys_role_id = #{roleId}
+    </update>
 </mapper>

@@ -1,6 +1,7 @@
 package com.chankin.dao;
 
 import com.chankin.model.entity.SysRolePermission;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -18,4 +19,6 @@ public interface SysRolePermissionMapper {
     int updateByPrimaryKey(SysRolePermission record);
 
     List<SysRolePermission> selectByRoleId(Long id);
+
+    void deleteByRoleId(@Param("roleId") String roleId);
 }

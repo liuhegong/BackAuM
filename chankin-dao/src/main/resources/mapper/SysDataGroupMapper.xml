@@ -42,9 +42,7 @@
 		#{status,jdbcType=TINYINT})
 	</insert>
 	<insert id="insertSelective" parameterType="com.chankin.model.entity.SysDataGroup">
-		<selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
-			SELECT LAST_INSERT_ID()
-		</selectKey>
+
 		insert into sys_data_group
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="description != null">
@@ -161,4 +159,14 @@
       status = #{status,jdbcType=TINYINT}
     where id = #{id,jdbcType=BIGINT}
   </update>
+
+	<select id="isExistName" resultType="java.lang.Boolean">
+		select exists(
+		select * from sys_data_group where status = 1 and name = #{name}
+		)
+	</select>
+
+	<select id="selectAll" resultType="SysDataGroup">
+		select * from sys_data_group where status = 1
+	</select>
 </mapper>

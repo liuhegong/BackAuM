@@ -2,30 +2,30 @@
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.chankin.dao.SysUserMapper">
 	<resultMap id="BaseResultMap" type="com.chankin.model.entity.SysUser">
-		<id column="id" property="id" jdbcType="BIGINT" />
-		<result column="login_name" property="loginName" jdbcType="VARCHAR" />
-		<result column="zh_name" property="zhName" jdbcType="VARCHAR" />
-		<result column="en_name" property="enName" jdbcType="VARCHAR" />
-		<result column="sex" property="sex" jdbcType="INTEGER" />
-		<result column="birth" property="birth" jdbcType="VARCHAR" />
-		<result column="email" property="email" jdbcType="VARCHAR" />
-		<result column="phone" property="phone" jdbcType="VARCHAR" />
-		<result column="address" property="address" jdbcType="VARCHAR" />
-		<result column="password" property="password" jdbcType="VARCHAR" />
-		<result column="password_salt" property="passwordSalt" jdbcType="VARCHAR" />
-		<result column="rank" property="rank" jdbcType="BIGINT" />
-		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
-		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
-		<result column="create_by" property="createBy" jdbcType="BIGINT" />
-		<result column="update_by" property="updateBy" jdbcType="BIGINT" />
-		<result column="status" property="status" jdbcType="TINYINT" />
-		<result column="is_final" property="isFinal" jdbcType="TINYINT" />
+		<id column="id" jdbcType="BIGINT" property="id" />
+		<result column="login_name" jdbcType="VARCHAR" property="loginName" />
+		<result column="zh_name" jdbcType="VARCHAR" property="zhName" />
+		<result column="en_name" jdbcType="VARCHAR" property="enName" />
+		<result column="sex" jdbcType="INTEGER" property="sex" />
+		<result column="birth" jdbcType="VARCHAR" property="birth" />
+		<result column="email" jdbcType="VARCHAR" property="email" />
+		<result column="phone" jdbcType="VARCHAR" property="phone" />
+		<result column="address" jdbcType="VARCHAR" property="address" />
+		<result column="password" jdbcType="VARCHAR" property="password" />
+		<result column="password_salt" jdbcType="VARCHAR" property="passwordSalt" />
+		<result column="rank" jdbcType="BIGINT" property="rank" />
+		<result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+		<result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+		<result column="create_by" jdbcType="BIGINT" property="createBy" />
+		<result column="update_by" jdbcType="BIGINT" property="updateBy" />
+		<result column="status" jdbcType="TINYINT" property="status" />
+		<result column="is_final" jdbcType="TINYINT" property="isFinal" />
 	</resultMap>
 	<sql id="Base_Column_List">
     id, login_name, zh_name, en_name, sex, birth, email, phone, address, password, password_salt, 
     rank, create_time, update_time, create_by, update_by, status, is_final
   </sql>
-	<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
 		select
 		<include refid="Base_Column_List" />
 		from sys_user
@@ -36,7 +36,7 @@
     where id = #{id,jdbcType=BIGINT}
   </delete>
 	<insert id="insert" parameterType="com.chankin.model.entity.SysUser">
-		<selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
+		<selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
 			SELECT LAST_INSERT_ID()
 		</selectKey>
 		insert into sys_user (login_name, zh_name, en_name,
@@ -53,7 +53,7 @@
 		#{status,jdbcType=TINYINT}, #{isFinal,jdbcType=TINYINT})
 	</insert>
 	<insert id="insertSelective" parameterType="com.chankin.model.entity.SysUser">
-		<selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
+		<selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
 			SELECT LAST_INSERT_ID()
 		</selectKey>
 		insert into sys_user
@@ -219,7 +219,7 @@
 				is_final = #{isFinal,jdbcType=TINYINT},
 			</if>
 		</set>
-		where id = #{id,jdbcType=BIGINT}
+		where id = #{id,jdbcType=BIGINT} and status != 2
 	</update>
 	<update id="updateByPrimaryKey" parameterType="com.chankin.model.entity.SysUser">
     update sys_user
@@ -240,10 +240,58 @@
       update_by = #{updateBy,jdbcType=BIGINT},
       status = #{status,jdbcType=TINYINT},
       is_final = #{isFinal,jdbcType=TINYINT}
-    where id = #{id,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT} and status != 2
   </update>
-	<select id="selectUserByLoginName" resultMap="BaseResultMap" parameterType="java.lang.String">
+	<select id="selectUserByLoginName" parameterType="java.lang.String" resultMap="BaseResultMap">
 		select * from sys_user where status != 2 and login_name =#{loginName}
 	</select>
 
+	<select id="selectByLoginName" resultType="boolean">
+		select exists(
+				select * from sys_user where status ！= 2 and login_name = #{loginName}
+		)
+	</select>
+
+	<select id="isExistLoginNameExcludeId" resultType="java.lang.Boolean">
+		select exists(
+		select * from sys_user where status != 2 and id = #{id} and login_name = #{loginName}
+		)
+	</select>
+
+	<select id="selectById" parameterType="long" resultType="SysUser">
+        SELECT *
+        FROM sys_user
+        WHERE id = #{id} AND status != 2
+    </select>
+
+	<select id="selectCounts" resultType="integer">
+		select count(*)
+		from sys_user where status != 2
+	</select>
+
+	<select id="selectAll" resultType="SysUser">
+		select * from sys_user where status != 2
+		<if test="loginName != null and loginName.length() != 0 ">
+			and login_name like concat('%',#{loginName},'%')
+		</if>
+		<if test="zhName != null and zhName.length() != 0 ">
+			and zhName like concat('%',#{zhName},'%')
+		</if>
+		<if test="email != null and email.length() != 0 ">
+			and email like concat('%',#{email},'%')
+		</if>
+		<if test="phone != null and phone.length() != 0 ">
+			and phone like concat('%',#{phone},'%')
+		</if>
+		<if test="address != null and address.length() != 0 ">
+			and address like concat('%',#{address},'%')
+		</if>
+		<if test="sort != ''">
+			order by #{sort}
+		</if>
+		<if test="order != ''">
+			#{order}
+		</if>
+
+	</select>
 </mapper>

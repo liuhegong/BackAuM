@@ -2,23 +2,23 @@
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.chankin.dao.SysIpForbiddenMapper">
 	<resultMap id="BaseResultMap" type="com.chankin.model.entity.SysIpForbidden">
-		<id column="id" property="id" jdbcType="BIGINT" />
-		<result column="is_final" property="isFinal" jdbcType="INTEGER" />
-		<result column="rank" property="rank" jdbcType="BIGINT" />
-		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
-		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
-		<result column="create_by" property="createBy" jdbcType="BIGINT" />
-		<result column="update_by" property="updateBy" jdbcType="BIGINT" />
-		<result column="status" property="status" jdbcType="TINYINT" />
-		<result column="expire_time" property="expireTime" jdbcType="TIMESTAMP" />
-		<result column="description" property="description" jdbcType="VARCHAR" />
-		<result column="ip" property="ip" jdbcType="VARCHAR" />
+		<id column="id" jdbcType="BIGINT" property="id" />
+		<result column="is_final" jdbcType="INTEGER" property="isFinal" />
+		<result column="rank" jdbcType="BIGINT" property="rank" />
+		<result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+		<result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+		<result column="create_by" jdbcType="BIGINT" property="createBy" />
+		<result column="update_by" jdbcType="BIGINT" property="updateBy" />
+		<result column="status" jdbcType="TINYINT" property="status" />
+		<result column="expire_time" jdbcType="TIMESTAMP" property="expireTime" />
+		<result column="description" jdbcType="VARCHAR" property="description" />
+		<result column="ip" jdbcType="VARCHAR" property="ip" />
 	</resultMap>
 	<sql id="Base_Column_List">
     id, is_final, rank, create_time, update_time, create_by, update_by, status, expire_time, 
     description, ip
   </sql>
-	<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
 		select
 		<include refid="Base_Column_List" />
 		from sys_ip_forbidden
@@ -28,8 +28,17 @@
     delete from sys_ip_forbidden
     where id = #{id,jdbcType=BIGINT}
   </delete>
+
+	<select id="selectCounts" resultType="integer">
+		select count(*) from sys_ip_forbidden where status = 1
+	</select>
+	<select id="selectAll" resultType="SysIpForbidden">
+		 SELECT *
+        FROM sys_ip_forbidden
+        WHERE status = 1
+	</select>
 	<insert id="insert" parameterType="com.chankin.model.entity.SysIpForbidden">
-		<selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
+		<selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
 			SELECT LAST_INSERT_ID()
 		</selectKey>
 		insert into sys_ip_forbidden (is_final, rank, create_time,
@@ -41,10 +50,8 @@
 		#{status,jdbcType=TINYINT}, #{expireTime,jdbcType=TIMESTAMP}, #{description,jdbcType=VARCHAR},
 		#{ip,jdbcType=VARCHAR})
 	</insert>
-	<insert id="insertSelective" parameterType="com.chankin.model.entity.SysIpForbidden">
-		<selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
-			SELECT LAST_INSERT_ID()
-		</selectKey>
+	<insert id="insertSelective" parameterType="com.chankin.model.entity.SysIpForbidden" useGeneratedKeys="true"
+		keyProperty="id">
 		insert into sys_ip_forbidden
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="isFinal != null">
@@ -111,6 +118,12 @@
 			</if>
 		</trim>
 	</insert>
+
+	<update id="deleteById">
+        UPDATE sys_ip_forbidden
+        SET status = 2
+        WHERE id = #{id}
+    </update>
 	<update id="updateByPrimaryKeySelective" parameterType="com.chankin.model.entity.SysIpForbidden">
 		update sys_ip_forbidden
 		<set>
@@ -145,7 +158,7 @@
 				ip = #{ip,jdbcType=VARCHAR},
 			</if>
 		</set>
-		where id = #{id,jdbcType=BIGINT}
+		where id = #{id,jdbcType=BIGINT} and status = 1
 	</update>
 	<update id="updateByPrimaryKey" parameterType="com.chankin.model.entity.SysIpForbidden">
     update sys_ip_forbidden
@@ -161,4 +174,7 @@
       ip = #{ip,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
+	<select id="isExistIP" resultType="java.lang.Boolean">
+		select exists( select * from sys_ip_forbidden where ip = #{ip} and status = 1)
+	</select>
 </mapper>

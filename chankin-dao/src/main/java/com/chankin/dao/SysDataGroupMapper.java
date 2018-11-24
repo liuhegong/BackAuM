@@ -1,6 +1,9 @@
 package com.chankin.dao;
 
 import com.chankin.model.entity.SysDataGroup;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface SysDataGroupMapper {
     int deleteByPrimaryKey(Long id);
@@ -14,4 +17,8 @@ public interface SysDataGroupMapper {
     int updateByPrimaryKeySelective(SysDataGroup record);
 
     int updateByPrimaryKey(SysDataGroup record);
+
+    boolean isExistName(@Param("name") String name);
+
+    List<SysDataGroup> selectAll();
 }

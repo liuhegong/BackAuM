@@ -57,6 +57,7 @@ public class BaseController {
         param.put("user_id", "cheat"); //网站用户id
         param.put("client_type", "web"); //web:电脑上的浏览器；h5:手机上的浏览器，包括移动应用内完全内置的web_view；native：通过原生SDK植入APP应用的方式
         param.put("ip_address", "127.0.0.1"); //传输用户请求验证时所携带的IP
+
         int gtResult = 0;
         if (gt_server_status_code == 1) {
             //gt-server正常，向gt-server进行二次验证

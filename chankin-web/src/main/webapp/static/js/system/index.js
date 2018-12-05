@@ -8,8 +8,10 @@ $(document).ready(function () {
                     url: getRootPath() + '/system/logout',
                     async: false,
                     dataType: 'json',
-                    success: function (result) {
-                        location = getRootPath();
+                    success: function (data) {
+                        if (data.code == 10000) {
+                            location.href = getRootPath();
+                        }
                     },
                 });
             }

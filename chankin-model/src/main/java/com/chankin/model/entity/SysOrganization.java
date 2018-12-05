@@ -23,7 +23,16 @@ public class SysOrganization {
 
     private Long updateBy;
 
-    private Byte status;
+
+    private Integer status;
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
 
     private String fullName;
 
@@ -105,14 +114,6 @@ public class SysOrganization {
 
     public void setUpdateBy(Long updateBy) {
         this.updateBy = updateBy;
-    }
-
-    public Byte getStatus() {
-        return status;
-    }
-
-    public void setStatus(Byte status) {
-        this.status = status;
     }
 
     public String getFullName() {

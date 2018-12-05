@@ -2,10 +2,10 @@ package com.chankin.system.security.shiro;
 
 import com.chankin.dao.*;
 import com.chankin.model.entity.*;
-import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authc.AuthenticationInfo;
-import org.apache.shiro.authc.AuthenticationToken;
-import org.apache.shiro.authc.SimpleAuthenticationInfo;
+import com.chankin.util.SystemConstant;
+import org.apache.shiro.authc.*;
+import org.apache.shiro.authc.credential.AllowAllCredentialsMatcher;
+import org.apache.shiro.authc.credential.CredentialsMatcher;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
@@ -38,7 +38,7 @@ public class ShiroRealm extends AuthorizingRealm {
     @Autowired
     private SysRolePermissionMapper sysRolePermissionMapper;
     @Autowired
-    private RedisTemplate<Object, Object> rediTemplate;
+    private RedisTemplate<Object, Object> redisTemplate;
 
     /*
      *
@@ -103,5 +103,31 @@ public class ShiroRealm extends AuthorizingRealm {
         //获取到的加盐密码和盐值
         AuthenticationInfo anthenticationInfo = new SimpleAuthenticationInfo(loginName, sysUser.getPassword(), ByteSource.Util.bytes(sysUser.getPasswordSalt()), getName());
         return anthenticationInfo;
+    }
+
+    @Override
+    protected void clearCachedAuthorizationInfo(PrincipalCollection principals) {
+        redisTemplate.delete(SystemConstant.shiro_cache_prefix + principals.getPrimaryPrincipal().toString());
+    }
+
+    @Override
+    protected void doClearCache(PrincipalCollection principals) {
+        log.debug("clearCachedAuthorizationInfo");
+    }
+
+    @Override
+    protected void assertCredentialsMatch(AuthenticationToken token, AuthenticationInfo info) throws AuthenticationException {
+        CredentialsMatcher cm = getCredentialsMatcher();
+        if (cm != null) {
+            if (!cm.doCredentialsMatch(token, info)) {
+                //not successful - throw an exception to indicate this:
+                String msg = "Submitted credentials for token [" + token + "] did not match the expected credentials.";
+                throw new IncorrectCredentialsException(msg);
+            }
+        } else {
+            throw new AuthenticationException("A CredentialsMatcher must be configured in order to verify " +
+                    "credentials during authentication.  If you do not wish for credentials to be examined, you " +
+                    "can configure an " + AllowAllCredentialsMatcher.class.getName() + " instance.");
+        }
     }
 }

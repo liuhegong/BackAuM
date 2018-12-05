@@ -15,7 +15,7 @@ public class SysLog {
 
     private Long updateBy;
 
-    private Byte status;
+    private Integer status;
 
     private String ip;
 
@@ -28,6 +28,13 @@ public class SysLog {
     private String url;
 
     private String userAgent;
+
+    // param :请求参数
+    private String param;
+
+    // result :请求结果
+    private String result;
+
 
     public Long getId() {
         return id;
@@ -77,11 +84,11 @@ public class SysLog {
         this.updateBy = updateBy;
     }
 
-    public Byte getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(Byte status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 

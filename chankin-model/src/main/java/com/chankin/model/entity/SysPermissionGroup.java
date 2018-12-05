@@ -23,7 +23,7 @@ public class SysPermissionGroup {
 
     private Long updateBy;
 
-    private Byte status;
+    private Integer status;
 
     public Long getId() {
         return id;
@@ -105,11 +105,11 @@ public class SysPermissionGroup {
         this.updateBy = updateBy;
     }
 
-    public Byte getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(Byte status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 }

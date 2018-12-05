@@ -1,8 +1,9 @@
 package com.chankin.model.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class SysPermission {
+public class SysPermission implements Serializable {
     private Long id;
 
     private String name;
@@ -25,7 +26,15 @@ public class SysPermission {
 
     private Long updateBy;
 
-    private Byte status;
+    private Integer status;
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
 
     public Long getId() {
         return id;
@@ -115,11 +124,5 @@ public class SysPermission {
         this.updateBy = updateBy;
     }
 
-    public Byte getStatus() {
-        return status;
-    }
 
-    public void setStatus(Byte status) {
-        this.status = status;
-    }
 }

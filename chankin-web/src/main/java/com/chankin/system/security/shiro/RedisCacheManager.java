@@ -17,7 +17,6 @@ public class RedisCacheManager implements CacheManager, Serializable {
 
     public RedisCacheManager() {
     }
-
     public RedisCacheManager(RedisTemplate<Object, Object> redisTemplate) {
         this.redisTemplate = redisTemplate;
     }
@@ -31,6 +30,7 @@ public class RedisCacheManager implements CacheManager, Serializable {
         Cache cache = (Cache) redisTemplate.opsForValue().get(name);
         if (cache == null) {
             cache = new RedisCache<>(redisTemplate);
+            //name为shiro-cache-com.chankin.system.security.shiro.ShiroRealm.authorizationCache
             redisTemplate.opsForValue().set(SystemConstant.shiro_cache_prefix + name, cache);
         }
         return cache;

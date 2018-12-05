@@ -31,8 +31,9 @@
   </delete>
 
 	<select id="selectCounts" resultType="integer">
-		selet count(*) from sys_data_item where status = 1
+		select count(*) from sys_data_item where status = 1
 	</select>
+
 	<insert id="insert" parameterType="com.chankin.model.entity.SysDataItem">
 		<selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
 			SELECT LAST_INSERT_ID()
@@ -183,10 +184,10 @@
     </select>
 
 	<select id="isExistName" resultType="java.lang.Boolean">
-		select exists( select * from sys_data_item where status =1 and key_name = #{key} and groupId =#{groupId} )
+		select exists( select * from sys_data_item where status =1 and key_name = #{key} and sys_data_group_id =#{groupId} )
 	</select>
 	<select id="selectAll" resultType="SysDataItem">
-		select select * from sys_data_item where status =1
+		select  * from sys_data_item where status =1
 	</select>
 
 	<update id="deleteById">

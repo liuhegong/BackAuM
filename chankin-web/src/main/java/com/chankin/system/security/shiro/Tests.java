@@ -28,7 +28,7 @@ public class Tests {
             user.name = "ssss";
         }
 
-        System.out.println("Original Size=" + unmodifiableCollection.size());
+        System.out.println("Original Size=" + unmodifiableCollection.size() + originalCollection.size());
         unmodifiableCollection.add(new User("d"));
         System.out.println("New Size=" + unmodifiableCollection.size());
         for (User user : unmodifiableCollection) {

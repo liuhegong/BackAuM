@@ -152,7 +152,6 @@
         </div>
         <div data-options="region:'south',boder:true" style="height:26px;">
             <div style="text-align: center;line-height: 24px;font-size: inherit">
-                作者:ananan&nbsp;QQ群:234700542
             </div>
 
         </div>

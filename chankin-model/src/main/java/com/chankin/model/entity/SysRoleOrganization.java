@@ -1,8 +1,9 @@
 package com.chankin.model.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class SysRoleOrganization {
+public class SysRoleOrganization implements Serializable {
     private Long id;
 
     private Long sysOrganizationId;
@@ -27,9 +28,9 @@ public class SysRoleOrganization {
 
     private Long updateBy;
 
-    private Byte status;
+    private Integer status;
 
-    private Byte isFinal;
+    private Integer isFinal;
 
     public Long getId() {
         return id;
@@ -127,19 +128,19 @@ public class SysRoleOrganization {
         this.updateBy = updateBy;
     }
 
-    public Byte getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(Byte status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 
-    public Byte getIsFinal() {
+    public Integer getIsFinal() {
         return isFinal;
     }
 
-    public void setIsFinal(Byte isFinal) {
+    public void setIsFinal(Integer isFinal) {
         this.isFinal = isFinal;
     }
 }

@@ -17,7 +17,15 @@ public class SysLoginStatus {
 
     private Date lastLoginTime;
 
-    private Byte platform;
+    public int getPlatform() {
+        return platform;
+    }
+
+    public void setPlatform(int platform) {
+        this.platform = platform;
+    }
+
+    private int platform;
 
     private Long rank;
 
@@ -29,7 +37,16 @@ public class SysLoginStatus {
 
     private Long updateBy;
 
-    private Byte status;
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    private Integer status;
+
 
     public Long getId() {
         return id;
@@ -87,13 +104,7 @@ public class SysLoginStatus {
         this.lastLoginTime = lastLoginTime;
     }
 
-    public Byte getPlatform() {
-        return platform;
-    }
 
-    public void setPlatform(Byte platform) {
-        this.platform = platform;
-    }
 
     public Long getRank() {
         return rank;
@@ -135,11 +146,4 @@ public class SysLoginStatus {
         this.updateBy = updateBy;
     }
 
-    public Byte getStatus() {
-        return status;
-    }
-
-    public void setStatus(Byte status) {
-        this.status = status;
-    }
 }

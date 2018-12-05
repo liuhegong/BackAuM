@@ -1,57 +1,78 @@
 package com.chankin.system.security.geetest;
 
-import java.io.*;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
-import java.net.InetAddress;
-import java.net.Socket;
 import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
  * Java SDK
+ * 
  */
 public class GeetestLib {
+
+    protected final String verName = "4.0";
+    protected final String sdkLang = "java";
+
+    protected final String apiUrl = "http://api.geetest.com";
+
+    protected final String registerUrl = "/register.php";
+    protected final String validateUrl = "/validate.php";
+
+    protected final String json_format = "1";
 
     /**
      * 极验验证二次验证表单数据 chllenge
      */
     public static final String fn_geetest_challenge = "geetest_challenge";
+
     /**
      * 极验验证二次验证表单数据 validate
      */
     public static final String fn_geetest_validate = "geetest_validate";
+
     /**
+     * /**
      * 极验验证二次验证表单数据 seccode
      */
     public static final String fn_geetest_seccode = "geetest_seccode";
-    protected final String verName = "3.3.0";// SDK版本编号
-    protected final String sdkLang = "java";// SD的语言类型
-    protected final String apiUrl = "http://api.geetest.com"; //极验验证API URL
-    protected final String baseUrl = "api.geetest.com";
-    protected final String registerUrl = "/register.php"; //register url
-    protected final String validateUrl = "/validate.php"; //validate url
-    /**
-     * 调试开关，是否输出调试日志
-     */
-    public boolean debugCode = false;
-    /**
-     * 极验验证API服务状态Session Key
-     */
-    public String gtServerStatusSessionKey = "gt_server_status";
+
     /**
      * 公钥
      */
     private String captchaId = "";
+
     /**
      * 私钥
      */
-
     private String privateKey = "";
-    private String userId = "";
+
+    /**
+     * 是否开启新的failback
+     */
+    private boolean newFailback = false;
+
+    /**
+     * 返回字符串
+     */
     private String responseStr = "";
+
+    /**
+     * 调试开关，是否输出调试日志
+     */
+    public boolean debugCode = true;
+
+    /**
+     * 极验验证API服务状态Session Key
+     */
+    public String gtServerStatusSessionKey = "gt_server_status";
 
     /**
      * 带参数构造函数
@@ -59,9 +80,11 @@ public class GeetestLib {
      * @param captchaId
      * @param privateKey
      */
-    public GeetestLib(String captchaId, String privateKey) {
+    public GeetestLib(String captchaId, String privateKey, boolean newFailback) {
+
         this.captchaId = captchaId;
         this.privateKey = privateKey;
+        this.newFailback = newFailback;
     }
 
     /**
@@ -70,11 +93,15 @@ public class GeetestLib {
      * @return 初始化结果
      */
     public String getResponseStr() {
+
         return responseStr;
+
     }
 
     public String getVersionInfo() {
+
         return verName;
+
     }
 
     /**
@@ -90,9 +117,22 @@ public class GeetestLib {
         String md5Str2 = md5Encode(rnd2 + "");
         String challenge = md5Str1 + md5Str2.substring(0, 2);
 
-        return String.format(
-                "{\"success\":%s,\"gt\":\"%s\",\"challenge\":\"%s\"}", 0,
-                this.captchaId, challenge);
+        JSONObject jsonObject = new JSONObject();
+        try {
+
+            jsonObject.put("success", 0);
+            jsonObject.put("gt", this.captchaId);
+            jsonObject.put("challenge", challenge);
+            jsonObject.put("new_captcha", this.newFailback);
+
+        } catch (JSONException e) {
+
+            gtlog("json dumps error");
+
+        }
+
+        return jsonObject.toString();
+
     }
 
     /**
@@ -101,9 +141,22 @@ public class GeetestLib {
     private String getSuccessPreProcessRes(String challenge) {
 
         gtlog("challenge:" + challenge);
-        return String.format(
-                "{\"success\":%s,\"gt\":\"%s\",\"challenge\":\"%s\"}", 1,
-                this.captchaId, challenge);
+
+        JSONObject jsonObject = new JSONObject();
+        try {
+
+            jsonObject.put("success", 1);
+            jsonObject.put("gt", this.captchaId);
+            jsonObject.put("challenge", challenge);
+
+        } catch (JSONException e) {
+
+            gtlog("json dumps error");
+
+        }
+
+        return jsonObject.toString();
+
     }
 
     /**
@@ -111,92 +164,80 @@ public class GeetestLib {
      *
      * @return 1表示初始化成功，0表示初始化失败
      */
-    public int preProcess() {
-        if (registerChallenge() != 1) {
+    public int preProcess(HashMap<String, String> data) {
+
+        if (registerChallenge(data) != 1) {
+
             this.responseStr = this.getFailPreProcessRes();
             return 0;
+
         }
+
         return 1;
 
     }
-
-    /**
-     * 验证初始化预处理
-     *
-     * @param userid
-     * @return 1表示初始化成功，0表示初始化失败
-     */
-    public int preProcess(String userid) {
-
-        this.userId = userid;
-        return this.preProcess();
-    }
-
 
     /**
      * 用captchaID进行注册，更新challenge
      *
      * @return 1表示注册成功，0表示注册失败
      */
-    private int registerChallenge() {
+    private int registerChallenge(HashMap<String, String> data) {
+
         try {
-            String GET_URL = apiUrl + registerUrl + "?gt=" + this.captchaId;
-            if (this.userId != "") {
-                GET_URL = GET_URL + "&user_id=" + this.userId;
-                this.userId = "";
+            String userId = data.get("user_id");
+            String clientType = data.get("client_type");
+            String ipAddress = data.get("ip_address");
+
+            String getUrl = apiUrl + registerUrl + "?";
+            String param = "gt=" + this.captchaId + "&json_format=" + this.json_format;
+
+            if (userId != null) {
+                param = param + "&user_id=" + userId;
             }
-            gtlog("GET_URL:" + GET_URL);
-            String result_str = readContentFromGet(GET_URL);
-            gtlog("register_result:" + result_str);
-            if (32 == result_str.length()) {
+            if (clientType != null) {
+                param = param + "&client_type=" + clientType;
+            }
+            if (ipAddress != null) {
+                param = param + "&ip_address=" + ipAddress;
+            }
 
-                this.responseStr = this.getSuccessPreProcessRes(this.md5Encode(result_str + this.privateKey));
+            gtlog("GET_URL:" + getUrl + param);
+            String result_str = readContentFromGet(getUrl + param);
+            if (result_str == "fail") {
 
-                return 1;
-            } else {
                 gtlog("gtServer register challenge failed");
                 return 0;
+
+            }
+
+            gtlog("result:" + result_str);
+            JSONObject jsonObject = new JSONObject(result_str);
+            String return_challenge = jsonObject.getString("challenge");
+
+            gtlog("return_challenge:" + return_challenge);
+
+            if (return_challenge.length() == 32) {
+
+                this.responseStr = this.getSuccessPreProcessRes(this.md5Encode(return_challenge + this.privateKey));
+
+                return 1;
+
+            } else {
+
+                gtlog("gtServer register challenge error");
+
+                return 0;
+
             }
         } catch (Exception e) {
+
+            gtlog(e.toString());
             gtlog("exception:register api");
+
         }
         return 0;
     }
-
-    /**
-     * 发送请求，获取服务器返回结果
-     *
-     * @param getURL
-     * @return 服务器返回结果
-     * @throws IOException
-     */
-    private String readContentFromGet(String getURL) throws IOException {
-
-        URL getUrl = new URL(getURL);
-        HttpURLConnection connection = (HttpURLConnection) getUrl
-                .openConnection();
-
-        connection.setConnectTimeout(2000);// 设置连接主机超时（单位：毫秒）
-        connection.setReadTimeout(2000);// 设置从主机读取数据超时（单位：毫秒）
-
-        // 建立与服务器的连接，并未发送数据
-        connection.connect();
-
-        // 发送数据到服务器并使用Reader读取返回的数据
-        StringBuffer sBuffer = new StringBuffer();
-
-        InputStream inStream = null;
-        byte[] buf = new byte[1024];
-        inStream = connection.getInputStream();
-        for (int n; (n = inStream.read(buf)) != -1; ) {
-            sBuffer.append(new String(buf, 0, n, "UTF-8"));
-        }
-        inStream.close();
-        connection.disconnect();// 断开连接
-
-        return sBuffer.toString();
-    }
-
 
     /**
      * 判断一个表单对象值是否为空
@@ -205,12 +246,17 @@ public class GeetestLib {
      * @return
      */
     protected boolean objIsEmpty(Object gtObj) {
+
         if (gtObj == null) {
+
             return true;
+
         }
 
         if (gtObj.toString().trim().length() == 0) {
+
             return true;
+
         }
 
         return false;
@@ -225,15 +271,21 @@ public class GeetestLib {
     private boolean resquestIsLegal(String challenge, String validate, String seccode) {
 
         if (objIsEmpty(challenge)) {
+
             return false;
+
         }
 
         if (objIsEmpty(validate)) {
+
             return false;
+
         }
 
         if (objIsEmpty(seccode)) {
+
             return false;
+
         }
 
         return true;
@@ -248,57 +300,89 @@ public class GeetestLib {
      * @param seccode
      * @return 验证结果, 1表示验证成功0表示验证失败
      */
-    public int enhencedValidateRequest(String challenge, String validate, String seccode) throws Exception {
+    public int enhencedValidateRequest(String challenge, String validate, String seccode, HashMap<String, String> data) {
 
         if (!resquestIsLegal(challenge, validate, seccode)) {
+
             return 0;
+
         }
+
         gtlog("request legitimate");
 
-        String host = baseUrl;
-        String path = validateUrl;
-        int port = 80;
-        String query = String.format("seccode=%s&sdk=%s", seccode,
-                (this.sdkLang + "_" + this.verName));
+        String userId = data.get("user_id");
+        String clientType = data.get("client_type");
+        String ipAddress = data.get("ip_address");
+
+        String postUrl = this.apiUrl + this.validateUrl;
+        String param = String.format("challenge=%s&validate=%s&seccode=%s&json_format=%s",
+                challenge, validate, seccode, this.json_format);
+
+        if (userId != null) {
+            param = param + "&user_id=" + userId;
+        }
+        if (clientType != null) {
+            param = param + "&client_type=" + clientType;
+        }
+        if (ipAddress != null) {
+            param = param + "&ip_address=" + ipAddress;
+        }
+
+        gtlog("param:" + param);
+
         String response = "";
+        try {
 
-        if (this.userId != "") {
-            query = query + "&user_id=" + this.userId;
-            this.userId = "";
+            if (validate.length() <= 0) {
+
+                return 0;
+
+            }
+
+            if (!checkResultByPrivate(challenge, validate)) {
+
+                return 0;
+
+            }
+
+            gtlog("checkResultByPrivate");
+
+            response = readContentFromPost(postUrl, param);
+
+            gtlog("response: " + response);
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+
         }
-        gtlog(query);
-        if (validate.length() <= 0) {
+
+        String return_seccode = "";
+
+        try {
+
+            JSONObject return_map = new JSONObject(response);
+            return_seccode = return_map.getString("seccode");
+            gtlog("md5: " + md5Encode(return_seccode));
+
+            if (return_seccode.equals(md5Encode(seccode))) {
+
+                return 1;
+
+            } else {
+
+                return 0;
+
+            }
+
+        } catch (JSONException e) {
+
+
+            gtlog("json load error");
             return 0;
+
         }
-        if (!checkResultByPrivate(challenge, validate)) {
-            return 0;
-        }
-        gtlog("checkResultByPrivate");
-        response = postValidate(host, path, query, port);
-        gtlog("response: " + response);
 
-        gtlog("md5: " + md5Encode(seccode));
-
-        if (response.equals(md5Encode(seccode))) {
-            return 1;
-        } else {
-            return 0;
-        }
-    }
-
-    /**
-     * 服务正常的情况下使用的验证方式,向gt-server进行二次验证,获取验证结果
-     *
-     * @param challenge
-     * @param validate
-     * @param seccode
-     * @param userid
-     * @return 验证结果, 1表示验证成功0表示验证失败
-     */
-    public int enhencedValidateRequest(String challenge, String validate, String seccode, String userid) throws Exception {
-
-        this.userId = userid;
-        return this.enhencedValidateRequest(challenge, validate, seccode);
     }
 
     /**
@@ -318,139 +402,8 @@ public class GeetestLib {
         }
         gtlog("request legitimate");
 
-        String[] validateStr = validate.split("_");
-        String encodeAns = validateStr[0];
-        String encodeFullBgImgIndex = validateStr[1];
-        String encodeImgGrpIndex = validateStr[2];
-
-        gtlog(String.format(
-                "encode----challenge:%s--ans:%s,bg_idx:%s,grp_idx:%s",
-                challenge, encodeAns, encodeFullBgImgIndex, encodeImgGrpIndex));
-
-        int decodeAns = decodeResponse(challenge, encodeAns);
-        int decodeFullBgImgIndex = decodeResponse(challenge, encodeFullBgImgIndex);
-        int decodeImgGrpIndex = decodeResponse(challenge, encodeImgGrpIndex);
-
-        gtlog(String.format("decode----ans:%s,bg_idx:%s,grp_idx:%s", decodeAns,
-                decodeFullBgImgIndex, decodeImgGrpIndex));
-
-        int validateResult = validateFailImage(decodeAns, decodeFullBgImgIndex, decodeImgGrpIndex);
-
-        return validateResult;
+        return 1;
     }
-
-
-    /**
-     * @param ans
-     * @param full_bg_index
-     * @param img_grp_index
-     * @return
-     */
-    private int validateFailImage(int ans, int full_bg_index,
-                                  int img_grp_index) {
-        final int thread = 3;// 容差值
-
-        String full_bg_name = md5Encode(full_bg_index + "").substring(0, 9);
-        String bg_name = md5Encode(img_grp_index + "").substring(10, 19);
-
-        String answer_decode = "";
-
-        // 通过两个字符串奇数和偶数位拼接产生答案位
-        for (int i = 0; i < 9; i++) {
-            if (i % 2 == 0) {
-                answer_decode += full_bg_name.charAt(i);
-            } else if (i % 2 == 1) {
-                answer_decode += bg_name.charAt(i);
-            } else {
-                gtlog("exception");
-            }
-        }
-
-        String x_decode = answer_decode.substring(4, answer_decode.length());
-
-        int x_int = Integer.valueOf(x_decode, 16);// 16 to 10
-
-        int result = x_int % 200;
-        if (result < 40) {
-            result = 40;
-        }
-
-        if (Math.abs(ans - result) <= thread) {
-            return 1;
-        } else {
-            return 0;
-        }
-    }
-
-
-    /**
-     * 解码随机参数
-     *
-     * @param encodeStr
-     * @param challenge
-     * @return
-     */
-    private int decodeResponse(String challenge, String string) {
-        if (string.length() > 100) {
-            return 0;
-        }
-
-        int[] shuzi = new int[]{1, 2, 5, 10, 50};
-        String chongfu = "";
-        HashMap<String, Integer> key = new HashMap<String, Integer>();
-        int count = 0;
-
-        for (int i = 0; i < challenge.length(); i++) {
-            String item = challenge.charAt(i) + "";
-
-            if (chongfu.contains(item) == true) {
-                continue;
-            } else {
-                int value = shuzi[count % 5];
-                chongfu += item;
-                count++;
-                key.put(item, value);
-            }
-        }
-
-        int res = 0;
-
-        for (int j = 0; j < string.length(); j++) {
-            res += key.get(string.charAt(j) + "");
-        }
-
-        res = res - decodeRandBase(challenge);
-
-        return res;
-
-    }
-
-    /**
-     * 输入的两位的随机数字,解码出偏移量
-     *
-     * @param randStr
-     * @return
-     */
-    private int decodeRandBase(String challenge) {
-
-        String base = challenge.substring(32, 34);
-        ArrayList<Integer> tempArray = new ArrayList<Integer>();
-
-        for (int i = 0; i < base.length(); i++) {
-            char tempChar = base.charAt(i);
-            Integer tempAscii = (int) (tempChar);
-
-            Integer result = (tempAscii > 57) ? (tempAscii - 87)
-                    : (tempAscii - 48);
-
-            tempArray.add(result);
-        }
-
-        int decodeRes = tempArray.get(0) * 36 + tempArray.get(1);
-        return decodeRes;
-
-    }
-
 
     /**
      * 输出debug信息，需要开启debugCode
@@ -469,46 +422,92 @@ public class GeetestLib {
     }
 
     /**
-     * 貌似不是Post方式，后面重构时修改名字
+     * 发送GET请求，获取服务器返回结果
      *
-     * @param host
-     * @param path
-     * @param data
-     * @param port
-     * @return
-     * @throws Exception
+     * @param getURL
+     * @return 服务器返回结果
+     * @throws IOException
      */
-    protected String postValidate(String host, String path, String data,
-                                  int port) throws Exception {
-        String response = "error";
+    private String readContentFromGet(String URL) throws IOException {
 
-        InetAddress addr = InetAddress.getByName(host);
-        Socket socket = new Socket(addr, port);
-        BufferedWriter wr = new BufferedWriter(new OutputStreamWriter(
-                socket.getOutputStream(), "UTF8"));
-        wr.write("POST " + path + " HTTP/1.0\r\n");
-        wr.write("Host: " + host + "\r\n");
-        wr.write("Content-Type: application/x-www-form-urlencoded\r\n");
-        wr.write("Content-Length: " + data.length() + "\r\n");
-        wr.write("\r\n"); // 以空行作为分割
+        URL getUrl = new URL(URL);
+        HttpURLConnection connection = (HttpURLConnection) getUrl
+                .openConnection();
 
-        // 发送数据
-        wr.write(data);
-        wr.flush();
+        connection.setConnectTimeout(2000);// 设置连接主机超时（单位：毫秒）
+        connection.setReadTimeout(2000);// 设置从主机读取数据超时（单位：毫秒）
 
-        // 读取返回信息
-        BufferedReader rd = new BufferedReader(new InputStreamReader(
-                socket.getInputStream(), "UTF-8"));
-        String line;
-        while ((line = rd.readLine()) != null) {
-            response = line;
+        // 建立与服务器的连接，并未发送数据
+        connection.connect();
+
+        if (connection.getResponseCode() == 200) {
+            // 发送数据到服务器并使用Reader读取返回的数据
+            StringBuffer sBuffer = new StringBuffer();
+
+            InputStream inStream = null;
+            byte[] buf = new byte[1024];
+            inStream = connection.getInputStream();
+            for (int n; (n = inStream.read(buf)) != -1; ) {
+                sBuffer.append(new String(buf, 0, n, "UTF-8"));
+            }
+            inStream.close();
+            connection.disconnect();// 断开连接
+
+            return sBuffer.toString();
+        } else {
+
+            return "fail";
         }
-        wr.close();
-        rd.close();
-        socket.close();
-        return response;
     }
 
+    /**
+     * 发送POST请求，获取服务器返回结果
+     *
+     * @param getURL
+     * @return 服务器返回结果
+     * @throws IOException
+     */
+    private String readContentFromPost(String URL, String data) throws IOException {
+
+        gtlog(data);
+        URL postUrl = new URL(URL);
+        HttpURLConnection connection = (HttpURLConnection) postUrl
+                .openConnection();
+
+        connection.setConnectTimeout(2000);// 设置连接主机超时（单位：毫秒）
+        connection.setReadTimeout(2000);// 设置从主机读取数据超时（单位：毫秒）
+        connection.setRequestMethod("POST");
+        connection.setDoInput(true);
+        connection.setDoOutput(true);
+        connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+
+        // 建立与服务器的连接，并未发送数据
+        connection.connect();
+
+        OutputStreamWriter outputStreamWriter = new OutputStreamWriter(connection.getOutputStream(), "utf-8");
+        outputStreamWriter.write(data);
+        outputStreamWriter.flush();
+        outputStreamWriter.close();
+
+        if (connection.getResponseCode() == 200) {
+            // 发送数据到服务器并使用Reader读取返回的数据
+            StringBuffer sBuffer = new StringBuffer();
+
+            InputStream inStream = null;
+            byte[] buf = new byte[1024];
+            inStream = connection.getInputStream();
+            for (int n; (n = inStream.read(buf)) != -1; ) {
+                sBuffer.append(new String(buf, 0, n, "UTF-8"));
+            }
+            inStream.close();
+            connection.disconnect();// 断开连接
+
+            return sBuffer.toString();
+        } else {
+
+            return "fail";
+        }
+    }
 
     /**
      * md5 加密
@@ -542,19 +541,4 @@ public class GeetestLib {
         return re_md5;
     }
 
-    public String getCaptchaId() {
-        return captchaId;
-    }
-
-    public void setCaptchaId(String captchaId) {
-        this.captchaId = captchaId;
-    }
-
-    public String getPrivateKey() {
-        return privateKey;
-    }
-
-    public void setPrivateKey(String privateKey) {
-        this.privateKey = privateKey;
-    }
 }

@@ -42,7 +42,6 @@
             return this;
         }
     };
-
     function Config(config) {
         var self = this;
         new _Object(config)._each(function (key, value) {

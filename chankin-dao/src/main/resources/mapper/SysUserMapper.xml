@@ -248,9 +248,10 @@
 
 	<select id="selectByLoginName" resultType="boolean">
 		select exists(
-				select * from sys_user where status ！= 2 and login_name = #{loginName}
+				select * from sys_user where status != 2 and login_name = #{loginName}
 		)
 	</select>
+
 
 	<select id="isExistLoginNameExcludeId" resultType="java.lang.Boolean">
 		select exists(

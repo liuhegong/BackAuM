@@ -35,9 +35,25 @@ public class SysUser {
 
     private Long updateBy;
 
-    private Byte status;
+    private Integer status;
 
-    private Byte isFinal;
+    private Integer isFinal;
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    public Integer getIsFinal() {
+        return isFinal;
+    }
+
+    public void setIsFinal(Integer isFinal) {
+        this.isFinal = isFinal;
+    }
 
     public Long getId() {
         return id;
@@ -167,19 +183,5 @@ public class SysUser {
         this.updateBy = updateBy;
     }
 
-    public Byte getStatus() {
-        return status;
-    }
 
-    public void setStatus(Byte status) {
-        this.status = status;
-    }
-
-    public Byte getIsFinal() {
-        return isFinal;
-    }
-
-    public void setIsFinal(Byte isFinal) {
-        this.isFinal = isFinal;
-    }
 }

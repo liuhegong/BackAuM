@@ -17,7 +17,7 @@ public interface SysPermissionMapper {
 
     SysPermission selectByPrimaryKey(Long id);
 
-    int updateByPrimaryKeySelective(SysPermission record);
+    void updateByPrimaryKeySelective(SysPermission record);
 
     int updateByPrimaryKey(SysPermission record);
 

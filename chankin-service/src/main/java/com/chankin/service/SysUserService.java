@@ -1,8 +1,9 @@
 package com.chankin.service;
 
 import com.chankin.model.dto.LoginInfo;
+import com.chankin.model.dto.PageInfo;
 import com.chankin.model.entity.SysUser;
-import com.github.pagehelper.PageInfo;
+import org.apache.ibatis.annotations.Param;
 
 import java.io.Serializable;
 
@@ -23,7 +24,11 @@ public interface SysUserService {
 
     void updateUser(SysUser user);
 
-    SysUser selectByLoginName(String loginName);
+    SysUser selectUserByLoginName(String loginName);
 
     LoginInfo login(SysUser user, Serializable id, int platform);
+
+    boolean selectByLoginName(@Param("loginName") String loginName);
+
+
 }

@@ -14,7 +14,6 @@ common_tool = {
         return timeStr;
     },
 }
-
 function getRootPath() {
     var curWwwPath = window.document.location.href;
     var pathName = window.document.location.pathname;

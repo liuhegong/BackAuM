@@ -22,6 +22,7 @@ public class RedisSessionDao extends AbstractSessionDAO {
 
     @Override
     protected Serializable doCreate(Session session) {
+        //session名字shiro-session-
         Serializable sessionId = sessionIdPrefix + UUID.randomUUID().toString();
         assignSessionId(session, sessionId);
         //redis储存session及过期时间

@@ -6,45 +6,68 @@
 
 	<context:property-placeholder location="classpath:application.properties" />
 
-	<!-- 配置默认数据源-MYSQL -->
-	<bean name="dataSourceMysql" class="com.alibaba.druid.pool.DruidDataSource" destroy-method="close"
-		init-method="init">
-		<!--基本属性 url、user、password-->
-		<property name="driverClassName" value="${jdbc.driver}" />
+	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+		<!-- 基本属性 url、user、password -->
 		<property name="url" value="${jdbc.url}" />
 		<property name="username" value="${jdbc.username}" />
 		<property name="password" value="${jdbc.password}" />
-
-		<!--配置初始化大小、最小、最大、-->
+		<property name="driverClassName" value="${jdbc.driver}" />
+		<!-- 配置初始化大小、最小、最大 -->
 		<property name="initialSize" value="1" />
-		<property name="maxIdle" value="1" />
+		<property name="minIdle" value="1" />
 		<property name="maxActive" value="20" />
-
-		<!--配置获取连接等待的超时时间-->
 		<property name="maxWait" value="60000" />
-
-		<!--配置检测时间间隔，检测时需要关闭控线连接-->
 		<property name="timeBetweenEvictionRunsMillis" value="60000" />
-
-		<!--配置一个连接在连接池的最小生存时间-->
 		<property name="minEvictableIdleTimeMillis" value="300000" />
-
-		<!-- 数据库validationQuery检查语句 oracle必须这样配置检查 -->
-		<property name="validationQuery" value="SELECT 1 FROM DUAL" />
+		<property name="validationQuery" value="SELECT 'x'" />
 		<property name="testWhileIdle" value="true" />
 		<property name="testOnBorrow" value="false" />
 		<property name="testOnReturn" value="false" />
-
-		<!--是否缓存preparedStatement，也就是PSCache。PSCache对支持游标的数据库性能提升巨大，比如说oracle。在mysql下建议关闭。-->
 		<property name="poolPreparedStatements" value="false" />
 		<property name="maxPoolPreparedStatementPerConnectionSize" value="20" />
-
-		<!--配置监控统计拦截的filters
-			属性类型是字符串，通过别名的方式配置扩展插件，常用的插件有：
-			监控统计用的filter:stat日志用的filter:log4j防御sql注入的filter:wall
-		-->
 		<property name="filters" value="stat" />
 	</bean>
+
+
+	<!-- 配置默认数据源-MYSQL -->
+	<!--	<bean name="dataSourceMysql" class="com.alibaba.druid.pool.DruidDataSource" destroy-method="close"
+			init-method="init">
+			&lt;!&ndash;基本属性 url、user、password&ndash;&gt;
+			<property name="driverClassName" value="${jdbc.driver}" />
+			<property name="url" value="${jdbc.url}" />
+			<property name="username" value="${jdbc.username}" />
+			<property name="password" value="${jdbc.password}" />
+
+			&lt;!&ndash;配置初始化大小、最小、最大、&ndash;&gt;
+			<property name="initialSize" value="1" />
+			<property name="maxIdle" value="1" />
+			<property name="maxActive" value="20" />
+
+			&lt;!&ndash;配置获取连接等待的超时时间&ndash;&gt;
+			<property name="maxWait" value="60000" />
+
+			&lt;!&ndash;配置检测时间间隔，检测时需要关闭控线连接&ndash;&gt;
+			<property name="timeBetweenEvictionRunsMillis" value="60000" />
+
+			&lt;!&ndash;配置一个连接在连接池的最小生存时间&ndash;&gt;
+			<property name="minEvictableIdleTimeMillis" value="300000" />
+
+			&lt;!&ndash; 数据库validationQuery检查语句 oracle必须这样配置检查 &ndash;&gt;
+			<property name="validationQuery" value="SELECT 1 FROM DUAL" />
+			<property name="testWhileIdle" value="true" />
+			<property name="testOnBorrow" value="false" />
+			<property name="testOnReturn" value="false" />
+
+			&lt;!&ndash;是否缓存preparedStatement，也就是PSCache。PSCache对支持游标的数据库性能提升巨大，比如说oracle。在mysql下建议关闭。&ndash;&gt;
+			<property name="poolPreparedStatements" value="false" />
+			<property name="maxPoolPreparedStatementPerConnectionSize" value="20" />
+
+			&lt;!&ndash;配置监控统计拦截的filters
+				属性类型是字符串，通过别名的方式配置扩展插件，常用的插件有：
+				监控统计用的filter:stat日志用的filter:log4j防御sql注入的filter:wall
+			&ndash;&gt;
+			<property name="filters" value="stat" />
+		</bean>-->
 	<!--MYSQL数据源-->
 
 
@@ -85,7 +108,7 @@
 
 	<!--配置mybatis工厂对象-->
 	<bean id="mybatisSqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
-		<property name="dataSource" ref="dataSourceMysql" />
+		<property name="dataSource" ref="dataSource" />
 		<property name="configLocation" value="classpath:spring/mybatis.xml" />
 		<property name="mapperLocations" value="classpath:mapper/*.xml" />
 	</bean>
@@ -98,7 +121,7 @@
 
 	<!--transaction control-->
 	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-		<property name="dataSource" ref="dataSourceMysql" />
+		<property name="dataSource" ref="dataSource" />
 	</bean>
 	<tx:annotation-driven transaction-manager="transactionManager" />
 

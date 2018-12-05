@@ -195,11 +195,12 @@
   </update>
 
 	<select id="isExistName" resultType="java.lang.Boolean">
-		select exists (select * from sys_role_organization status = 1 and name = #{name} and parentId = #{parentId})
+		select exists (select * from sys_role_organization WHERE status = 1 and name = #{name} and parent_id = #{parentId})
 	</select>
 
+
 	<select id="isExistNameExcludeId" resultType="java.lang.Boolean">
-		select exists (select * from sys_role_organization status = 1 and name = #{name} and parentId = #{parentId}) and id !=#{id}
+		select exists (select * from sys_role_organization where status = 1 and name = #{name} and parent_id = #{parentId} and id != #{id})
 	</select>
 
 	<select id="selectCounts" resultType="integer">
@@ -207,7 +208,7 @@
 	</select>
 
 	<select id="selectChildren" resultType="SysRoleOrganization">
-		select * from sys_role_organization where status = 1 and parentId = #{parentId}
+		select * from sys_role_organization where status = 1 and parent_id = #{parentId}
 	</select>
 
 	<select id="selectByRoleId" resultType="long">

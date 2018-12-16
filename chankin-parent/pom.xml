@@ -16,7 +16,7 @@
 		</mybatis.generator.generatorConfig.xml>
 		<mybatis.generator.generatorConfig.properties>file:///${basedir}/src/test/resources/generatorConfig.properties
 		</mybatis.generator.generatorConfig.properties>
-
+		<!--版本控制-->
 		<java.version>1.8</java.version>
 		<spring.version>4.3.3.RELEASE</spring.version>
 		<aspectj.version>1.7.3</aspectj.version>

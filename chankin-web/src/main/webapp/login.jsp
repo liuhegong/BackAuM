@@ -23,7 +23,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     </head>
     <body>
-        <div id="login">
+        <div id="login" style="overflow: hidden;">
             <div style="padding: 15px 50px 0 60px;">
                 <p>账号:<input name="username" id="username" style="width: 300px;height: 35px" type="text"
                              class="textbox"></p>

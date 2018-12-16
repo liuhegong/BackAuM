@@ -55,9 +55,10 @@ $(document).ready(function () {
         title: '系统登录',
         closable: false,
         width: 500,
-        height: 450,
+        height: 300,
         cache: false,
         modal: true,
+        datagrid: true,
         resizable: false,
         draggable: false,
         buttons: [

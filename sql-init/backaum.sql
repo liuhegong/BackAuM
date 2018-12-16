@@ -2,12 +2,12 @@
 Navicat MySQL Data Transfer
 
 Source Server         : mysql
-Source Server Version : 50723
+Source Server Version : 5.7.23
 Source Host           : localhost:3306
 Source Database       : backaum
 
 Target Server Type    : MYSQL
-Target Server Version : 50723
+Target Server Version : 5.7.23
 File Encoding         : 65001
 
 Date: 2018-12-03 19:24:00

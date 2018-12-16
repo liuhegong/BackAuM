@@ -24,7 +24,7 @@
     <body class="easyui-layout">
         <div data-options="region:'north',border:false" style="height:40px; background:#198ec2;padding: 0;">
             <div style="height: 40px; float: left; line-height: 40px">
-                <span style="font-weight:bolder; font-size: large;padding-left: 10px;color: #ffffff">Hunt-Admin 快速开发平台</span>
+                <span style="font-weight:bolder; font-size: large;padding-left: 10px;color: #ffffff">BackAum-Admin 快速开发平台</span>
             </div>
             <div style="float:right;height: 40px;padding: 0;">
 

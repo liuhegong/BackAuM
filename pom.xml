@@ -9,6 +9,7 @@
 	<version>1.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>chankin</name>
+
 	<modules>
 		<module>chankin-parent</module>
 		<module>chankin-common</module>

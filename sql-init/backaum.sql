@@ -65,11 +65,11 @@ CREATE TABLE `sys_data_item` (
 -- ----------------------------
 -- Records of sys_data_item
 -- ----------------------------
-INSERT INTO `sys_data_item` VALUES ('1', '1', '796c2461adf8051c835e4a758a6091f6', 'geetest_id', '2', '0', '2016-10-31 22:08:48', '2018-11-18 12:15:38', '0', '0', '1', 'geetest_id');
-INSERT INTO `sys_data_item` VALUES ('2', '1', '0edad631bed761ab039d8391dd3103ff', 'geetest_key', '2', '0', '2016-10-31 22:09:19', '2018-11-18 12:15:42', '0', '0', '1', 'geetest_key');
+INSERT INTO `sys_data_item` VALUES ('1', '1', 'c7668adb58225df1a0fa08b7809addd0', 'geetest_id', '2', '0', '2016-10-31 22:08:48', '2018-11-18 12:15:38', '0', '0', '1', 'geetest_id');
+INSERT INTO `sys_data_item` VALUES ('2', '1', '520f453387943869a888ee711587a457', 'geetest_key', '2', '0', '2016-10-31 22:09:19', '2018-11-18 12:15:42', '0', '0', '1', 'geetest_key');
 INSERT INTO `sys_data_item` VALUES ('3', '2', 'true', 'error_detail', '2', '0', '2016-10-31 22:10:21', '2016-10-31 23:51:13', '0', '0', '1', '是否输出错误日志详情');
 INSERT INTO `sys_data_item` VALUES ('4', '3', 'true', 'ip_forbidden', '2', '0', '2016-11-05 18:55:58', '2016-11-15 18:03:13', '0', '0', '1', '是否开启ip拦截');
-INSERT INTO `sys_data_item` VALUES ('5', '4', '/hunt-admin', 'basePath', '2', '0', '2016-11-15 17:34:27', '2016-11-15 19:07:37', '0', '0', '1', '系统root路径');
+INSERT INTO `sys_data_item` VALUES ('5', '4', '/backaum', 'basePath', '2', '0', '2016-11-15 17:34:27', '2016-11-15 19:07:37', '0', '0', '1', '系统root路径');
 
 -- ----------------------------
 -- Table structure for sys_ip_forbidden

@@ -1,6 +1,6 @@
 ### Java background management system
 
-**[中文README🇨🇳](https://github.com/Chankin026/BackAuM/blob/master/README-zh-cn.md)**    <a href="https://github.com/Ouyangan" style="text-align: right">Forked from Ouyangan</a>
+**[中文README🇨🇳](https://github.com/Chankin026/BackAuM/blob/master/README-zh-cn.md)**   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;             Forked from [Ouyangan](https://github.com/Ouyangan)
 ---
 
 **Project Introduction**
@@ -9,7 +9,7 @@ This is a background management system that includes common modules, using Sprin
 
 - Implement `shiroCache`, `shiroSession` management with redis, server restart does not affect user status information
 - Flexible permission configuration scheme, which can configure permissions for a certain role, or configure permissions for a user individually, maximizing the need for personalized permissions, and dynamic refresh of permissions, effective immediately, no need to log in again
-- Position information consists of departments, roles, and responsibilities. It basically meets the needs of various perverted personnel organizations. There is no limit to the upper and lower levels of the catalogue.
+- Position information consists of departments, roles, and permissions. It basically meets the needs of various perverted personnel organizations. There is no limit to the upper and lower levels of the catalogue.
 - Terminal login restriction, automatically offline the same type of terminal remote account, forcing a terminal user to go offline, disable the startup account.
 - Uniform exception handling, json requests return json type error data, normal web requests return normal web error pages.
 - Production, development, separation of the local environment, easy integration, such as `mvn clean install -Pprod`

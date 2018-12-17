@@ -1,7 +1,6 @@
 ### Java background management system
 
-**[中文README🇨🇳](https://github.com/Chankin026/BackAuM/blob/master/README-zh-cn.md)** &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;                          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
-<p align="left">Forked from [Ouyangan](https://github.com/Ouyangan)</p>
+**[中文README🇨🇳](https://github.com/Chankin026/BackAuM/blob/master/README-zh-cn.md)**    <a href="https://github.com/Ouyangan" align="left">Forked from Ouyangan</a>
 ---
 
 **Project Introduction**

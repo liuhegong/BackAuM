@@ -1,6 +1,6 @@
 ### Java background management system
 
-**[中文README🇨🇳](https://github.com/Chankin026/BackAuM/blob/master/README-zh-cn.md)**       Forked from [Ouyangan](https://github.com/Ouyangan)                                               Forked from [Ouyangan] (https://github.com/Ouyangan)
+**[中文README🇨🇳](https://github.com/Chankin026/BackAuM/blob/master/README-zh-cn.md)**                                                                             Forked from [Ouyangan](https://github.com/Ouyangan)  
 
 ---
 

@@ -1,5 +1,4 @@
-### Java后台管理系统                                     
-​				                                                             Forked from [Ouyangan](https://github.com/Ouyangan)														
+### Java后台管理系统                                                                                              							
 ---
 
 **项目介绍**

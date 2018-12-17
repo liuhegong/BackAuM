@@ -42,9 +42,9 @@
 	<!--过滤器-->
 	<bean class="com.chankin.system.security.shiro.ShiroAuthenticationFilter" id="authenticationFilter" />
 
-	<!--
-		<bean id="authorizationFilter" class="com.chankin.system.security.shiro.ShiroAuthorizationFilter"/>
-	-->
+
+	<bean class="com.chankin.system.security.shiro.ShiroAuthorizationFilter" id="authorizationFilter" />
+
 
 	<bean class="org.apache.shiro.spring.LifecycleBeanPostProcessor" id="lifecycleBeanPostProcessor" />
 	<bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"
@@ -58,9 +58,7 @@
 		<property name="loginUrl" value="/" />
 		<property name="filters">
 			<map>
-				<!--
-									<entry key="auth" value-ref="authorizationFilter"/>
-				-->
+				<entry key="auth" value-ref="authorizationFilter" />
 				<entry key="authc" value-ref="authenticationFilter" />
 			</map>
 		</property>

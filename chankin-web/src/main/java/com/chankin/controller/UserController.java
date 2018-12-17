@@ -74,6 +74,7 @@ public class UserController {
         user.setAddress(address);
         user.setBirth(birth);
         user.setIsFinal(isFinal);
+        user.setStatus(1);
         String salt = UUID.randomUUID().toString().replace("-", "");
         user.setPasswordSalt(salt);
         user.setPassword(StringUtil.createPassword(password, salt, 2));
@@ -102,7 +103,7 @@ public class UserController {
     @ApiOperation(value = "更新用户", httpMethod = "POST", produces = "application/json", response = Result.class)
     @RequiresPermissions("user:update")
     @ResponseBody
-    @RequestMapping(value = "delete", method = RequestMethod.POST)
+    @RequestMapping(value = "update", method = RequestMethod.POST)
     public Result update(@ApiParam(value = "用户id") @RequestParam long id,
                          @ApiParam(value = "登录用户名") @RequestParam String loginName,
                          @ApiParam(value = "用户中文名") @RequestParam String zhName,

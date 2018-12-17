@@ -250,8 +250,10 @@
 			<properties>
 				<profiles.active>prod</profiles.active>
 			</properties>
+
 		</profile>
 	</profiles>
+
 	<repositories>
 		<repository>
 			<id>mvnrepository</id>

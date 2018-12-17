@@ -122,23 +122,25 @@ public class PermissionController extends BaseController {
     @ResponseBody
     @RequiresPermissions("permission:update")
     @RequestMapping(value = "update", method = RequestMethod.POST)
-    public Result update(@ApiParam(value = "权限id", required = true) @RequestParam long id,
+    public Result update(@ApiParam(value = "权限id", required = true) @RequestParam String id,
                          @ApiParam(value = "权限组id", required = true) @RequestParam long groupId,
                          @ApiParam(value = "权限名称", required = true) @RequestParam String name,
                          @ApiParam(value = "权限编码", required = true) @RequestParam String code,
                          @ApiParam(value = "权限说明", required = true) @RequestParam String description) {
-        SysPermission sysPermission = sysPermissionService.selectById(id);
+        System.out.println("==================" + id);
+        long ids = Long.valueOf(id);
+        SysPermission sysPermission = sysPermissionService.selectById(ids);
         if (sysPermission == null) {
             return Result.error(ResponseCode.data_not_exist.getMsg());
         }
         if (sysPermission.getIsFinal() == 2) {
             return Result.error(ResponseCode.can_not_edit.getMsg());
         }
-        boolean isExistName = sysPermissionService.isExistNameExcludeId(id, groupId, name);
+        boolean isExistName = sysPermissionService.isExistNameExcludeId(ids, groupId, name);
         if (isExistName) {
             return Result.error(ResponseCode.name_already_exist.getMsg());
         }
-        boolean isExistCode = sysPermissionService.isExistCodeExcludeId(id, groupId, code);
+        boolean isExistCode = sysPermissionService.isExistCodeExcludeId(ids, groupId, code);
         if (isExistCode) {
             return Result.error(ResponseCode.code_already_exist.getMsg());
         }
